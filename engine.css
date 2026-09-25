@@ -475,3 +475,17 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
 .slide.dark th{color:#8FA0B5;border-bottom-color:#2A313C}
 .slide.dark .tcard{background:rgba(255,255,255,.06)}
 .slide.dark .chip{background:rgba(255,255,255,.1);color:#fff}
+
+/* ---------- deck switcher ---------- */
+.slide.off{display:none!important}
+.deckseg{display:inline-flex;background:var(--fill);border-radius:999px;padding:4px;gap:2px;pointer-events:auto;margin-left:4px}
+.deckseg button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:14px;font-weight:800;color:var(--t2);cursor:pointer;white-space:nowrap}
+.deckseg button:hover{color:var(--t1)}
+.deckseg button[aria-selected="true"]{background:#fff;color:var(--blue);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+#stage.is-dark .deckseg{background:rgba(255,255,255,.1)}
+#stage.is-dark .deckseg button{color:#AEB7C3}
+#stage.is-dark .deckseg button[aria-selected="true"]{background:#3182F6;color:#fff;box-shadow:none}
+.deckbar{display:none;position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:52;background:rgba(25,31,40,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:5px;border-radius:999px;gap:2px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.deckbar button{border:0;background:transparent;color:#C9D1DC;height:34px;padding:0 13px;border-radius:999px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.deckbar button[aria-selected="true"]{background:#3182F6;color:#fff}
+body.scroll .deckbar{display:flex}

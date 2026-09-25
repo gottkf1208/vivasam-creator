@@ -23,9 +23,12 @@ def mmss(m):
     return f"{m:02d}:00"
 
 
+CUR_DECK = ""
+
+
 def slide(cls, ep, title, plan, body, notes=""):
     nt = f'<aside class="nt" hidden>{e(notes)}</aside>' if notes else ""
-    return (f'<section class="slide {cls}" data-ep="{e(ep)}" data-title="{e(title)}" data-plan="{e(plan)}">'
+    return (f'<section class="slide {cls}" data-deck="{e(CUR_DECK)}" data-ep="{e(ep)}" data-title="{e(title)}" data-plan="{e(plan)}">'
             f"{body}{nt}</section>\n")
 
 
@@ -35,7 +38,9 @@ def head(eyebrow, title, lead=None, mb=None):
     return f'<div class="head"{st}><span class="eyebrow">{e(eyebrow)}</span><h2 class="s-title">{e(title)}</h2>{l}</div>'
 
 
-def build(d):
+def build_slides(d):
+    global CUR_DECK
+    CUR_DECK = d["id"]
     S = d["sessions"]
     n_s = len(S)
     per = [sum(g["min"] for g in s["segments"]) for s in S]
@@ -175,8 +180,16 @@ def build(d):
   <div class="cl-in"><h2>{d['closing']['h2']}</h2><p>{e(d['closing']['p'])}</p><div class="thanks">{th}</div></div>"""
     out.append(slide("dark closing", "WRAP", "클로징", "", body, d["notes"]["closing"]))
 
-    slides_html = "".join(out)
-    ticker = json.dumps(d["ticker"], ensure_ascii=False)
+    return "".join(out)
+
+
+def page(title, decks, slides_html, body_id):
+    """decks: [{id,label,prog,ticker}] — 1개면 토글 숨김."""
+    meta = json.dumps(decks, ensure_ascii=False)
+    seg = "".join(f'<button type="button" data-deck-pick="{e(x["id"])}" aria-selected="false">{e(x["label"])}</button>' for x in decks)
+    seg_html = f'<span class="deckseg" id="deckSeg">{seg}</span>' if len(decks) > 1 else ""
+    bar_html = f'<div class="deckbar" aria-label="기획안 선택">{seg}</div>' if len(decks) > 1 else ""
+    d = {"pageTitle": title, "id": body_id, "progName": decks[0]["prog"]}
     return f"""<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -193,13 +206,14 @@ def build(d):
 </head>
 <body data-deck="{e(d['id'])}">
 <script id="deckEdits" type="application/json" data-deck>{{"v":1,"t":{{}},"n":{{}},"u":""}}</script>
-<script id="deckTicker" type="application/json" data-deck>{ticker}</script>
+<script id="deckMeta" type="application/json" data-deck>{meta}</script>
 
 <div id="stage">
 <div class="chrome-top" aria-hidden="true">
   <span class="onair"><i></i>ON AIR</span>
-  <span class="prog-name">{e(d['progName'])}</span>
+  <span class="prog-name" id="progName">{e(d['progName'])}</span>
   <span class="ep-tag" id="epTag">OPENING</span>
+  {seg_html}
   <span class="sp"></span>
   <span class="clock" id="clock">00:00</span>
   <span class="counter" id="counter">1 / 1</span>
@@ -214,6 +228,7 @@ def build(d):
 </div>
 </div>
 
+{bar_html}
 <nav class="dock" id="dock" aria-label="발표 조작">
   <button type="button" id="bPrev" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
   <span class="pg" id="dockPg">1 / 1</span>
@@ -276,10 +291,22 @@ def build(d):
 """
 
 
-built = []
-for path in sorted((ROOT / "data").glob("*.json")):
+ORDER = ["miricanvas", "vrew", "physical-ai"]
+LABEL = {"miricanvas": "A · 미리캔버스", "vrew": "B · 브루", "physical-ai": "C · 피지컬 AI"}
+DATA = {}
+for path in (ROOT / "data").glob("*.json"):
     d = json.loads(path.read_text(encoding="utf-8"))
-    out = DIST / f"{d['id']}.html"
-    out.write_text(build(d), encoding="utf-8")
-    built.append(out.name)
+    DATA[d["id"]] = d
+built = []
+all_html, decks = [], []
+for did in ORDER:
+    d = DATA[did]
+    html = build_slides(d)
+    one = {"id": did, "label": LABEL[did], "prog": d["progName"], "ticker": d["ticker"]}
+    (DIST / f"{did}.html").write_text(page(d["pageTitle"], [one], html, did), encoding="utf-8")
+    built.append(f"{did}.html")
+    all_html.append(html)
+    decks.append(one)
+(DIST / "index.html").write_text(page("쌤크리에이터 스튜디오 · 비바샘 샘크리에이티브 연수 기획안 3편", decks, "".join(all_html), "studio"), encoding="utf-8")
+built.append("index.html (합본·토글)")
 print("built:", ", ".join(built), "->", DIST)

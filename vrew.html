@@ -487,23 +487,38 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
 .slide.dark .tcard{background:rgba(255,255,255,.06)}
 .slide.dark .chip{background:rgba(255,255,255,.1);color:#fff}
 
+/* ---------- deck switcher ---------- */
+.slide.off{display:none!important}
+.deckseg{display:inline-flex;background:var(--fill);border-radius:999px;padding:4px;gap:2px;pointer-events:auto;margin-left:4px}
+.deckseg button{border:0;background:transparent;padding:6px 14px;border-radius:999px;font-size:14px;font-weight:800;color:var(--t2);cursor:pointer;white-space:nowrap}
+.deckseg button:hover{color:var(--t1)}
+.deckseg button[aria-selected="true"]{background:#fff;color:var(--blue);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+#stage.is-dark .deckseg{background:rgba(255,255,255,.1)}
+#stage.is-dark .deckseg button{color:#AEB7C3}
+#stage.is-dark .deckseg button[aria-selected="true"]{background:#3182F6;color:#fff;box-shadow:none}
+.deckbar{display:none;position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:52;background:rgba(25,31,40,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:5px;border-radius:999px;gap:2px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.deckbar button{border:0;background:transparent;color:#C9D1DC;height:34px;padding:0 13px;border-radius:999px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+.deckbar button[aria-selected="true"]{background:#3182F6;color:#fff}
+body.scroll .deckbar{display:flex}
+
 </style>
 </head>
 <body data-deck="vrew">
 <script id="deckEdits" type="application/json" data-deck>{"v":1,"t":{},"n":{},"u":""}</script>
-<script id="deckTicker" type="application/json" data-deck>[["연수", "직무 / 6차시(15차시 미만) · 샘크리에이티브"], ["러닝타임", "150분 · 차시당 25분"], ["대상", "초·중등 교사 · 영상 편집 무경험 환영"], ["도구", "브루(Vrew) · 자동 자막 · 텍스트 컷 편집 · AI 성우"], ["산출물", "설명 영상 · AI 성우 영상 · 행사 영상 · 학생 UCC 지도안 · 쇼츠 3편"], ["이수", "진도율 90% · 의견등록 100% · 시험 0%"], ["연수비", "30,000원 (캔바 6차시 과정 기준)"], ["강사", "두목쿼카 + 쿼카연구회"]]</script>
+<script id="deckMeta" type="application/json" data-deck>[{"id": "vrew", "label": "B · 브루", "prog": "샘크리에이티브 연수 기획안 · 브루", "ticker": [["연수", "직무 / 6차시(15차시 미만) · 샘크리에이티브"], ["러닝타임", "150분 · 차시당 25분"], ["대상", "초·중등 교사 · 영상 편집 무경험 환영"], ["도구", "브루(Vrew) · 자동 자막 · 텍스트 컷 편집 · AI 성우"], ["산출물", "설명 영상 · AI 성우 영상 · 행사 영상 · 학생 UCC 지도안 · 쇼츠 3편"], ["이수", "진도율 90% · 의견등록 100% · 시험 0%"], ["연수비", "30,000원 (캔바 6차시 과정 기준)"], ["강사", "두목쿼카 + 쿼카연구회"]]}]</script>
 
 <div id="stage">
 <div class="chrome-top" aria-hidden="true">
   <span class="onair"><i></i>ON AIR</span>
-  <span class="prog-name">샘크리에이티브 연수 기획안 · 브루</span>
+  <span class="prog-name" id="progName">샘크리에이티브 연수 기획안 · 브루</span>
   <span class="ep-tag" id="epTag">OPENING</span>
+  
   <span class="sp"></span>
   <span class="clock" id="clock">00:00</span>
   <span class="counter" id="counter">1 / 1</span>
 </div>
 
-<section class="slide title-slide" data-ep="OPENING" data-title="오프닝" data-plan="기획안 표지">
+<section class="slide title-slide" data-deck="vrew" data-ep="OPENING" data-title="오프닝" data-plan="기획안 표지">
   <div class="t-left">
     <span class="eyebrow">STUDIO B · 직무연수 · 6차시(15차시 미만) · 디지털·AI</span>
     <h1>말하면 편집 끝!<br>브루로 만드는 <em>수업 영상</em> 6차시</h1>
@@ -517,25 +532,25 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
     <p>음성 인식으로 자막을 자동 생성하고, 텍스트를 지우면 영상이 잘리는 국산 AI 영상 편집기. 텍스트로 비디오 만들기, AI 성우, 무음 구간 제거, 번역 자막, 얼굴 모자이크 제공.</p>
     <div class="ep-list"><span>1. 브루 시작하기</span><span>2. 수업 설명 영상 만들기</span><span>3. AI 목소리로 영상 만들기</span><span>4. 학급 행사 영상</span><span>5. 학생과 함께 브루</span><span>6. AI로 브루 끝내기 · 쌤크리에이터 첫걸음</span></div>
   </div><aside class="nt" hidden>스튜디오 B 브루 편입니다. 브루는 말이 곧 편집이라, 편집 경험이 없는 선생님이 첫 시간에 영상 한 편을 냅니다. 6차시는 난이도가 아니라 교실에서 쓰는 영상 종류로 나눴어요.</aside></section>
-<section class="slide " data-ep="OPENING" data-title="편성표" data-plan="6차시 구성"><div class="head"><span class="eyebrow">편성표 · 6차시</span><h2 class="s-title">매 차시 영상 한 편, 여섯 번째엔 쇼츠와 채널까지</h2></div>
+<section class="slide " data-deck="vrew" data-ep="OPENING" data-title="편성표" data-plan="6차시 구성"><div class="head"><span class="eyebrow">편성표 · 6차시</span><h2 class="s-title">매 차시 영상 한 편, 여섯 번째엔 쇼츠와 채널까지</h2></div>
   <div class="body">
     <div class="tl40"><button type="button" style="flex:25" data-go="EP.01"><b>1차시 · 25분</b><strong>브루 시작하기</strong></button><button type="button" style="flex:25" data-go="EP.02"><b>2차시 · 25분</b><strong>수업 설명 영상 만들기</strong></button><button type="button" style="flex:25" data-go="EP.03"><b>3차시 · 25분</b><strong>AI 목소리로 영상 만들기</strong></button><button type="button" style="flex:25" data-go="EP.04"><b>4차시 · 25분</b><strong>학급 행사 영상</strong></button><button type="button" style="flex:25" data-go="EP.05"><b>5차시 · 25분</b><strong>학생과 함께 브루</strong></button><button type="button" style="flex:25" class="key" data-go="EP.06"><b>6차시 · 25분</b><strong>AI로 브루 끝내기 · 쌤크리에이터 첫걸음</strong></button></div>
     <div class="tl-axis"><span style="left:0;transform:none">0분</span><span style="left:16.7%">25분</span><span style="left:33.3%">50분</span><span style="left:50.0%">75분</span><span style="left:66.7%">100분</span><span style="left:83.3%">125분</span><span style="left:auto;right:0;transform:none">150분</span></div>
     <div class="after"><div class="card"><span class="t">이수</span><h4>진도율 90% · 의견등록</h4><p>시험 없음. 60점 이상이면 이수예요.</p></div><div class="card"><span class="t">산출물</span><h4>설명 영상 · 행사 영상 · 쇼츠 3편</h4><p>내 수업 영상이 채널에 올라가요.</p></div><div class="card"><span class="t">연수비(참고)</span><h4>30,000원 · 연중 수강</h4><p>캔바 6차시 과정과 같은 조건이에요.</p></div></div>
   </div><aside class="nt" hidden>25분씩 여섯 번이에요. 파란 칸 6차시가 쌤크리에이터로 이어지는 시간이라 이 연수의 출구예요.</aside></section>
-<section class="slide soft" data-ep="OPENING" data-title="기획 의도" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">기획 의도 · 왜 지금, 왜 이 도구인가</span><h2 class="s-title">선생님은 이미 매일 &#x27;말&#x27;로 수업한다. 브루는 그 말을 자막으로 받아 적고, 말이 곧 편집이 된다. 그래서 첫 시간부터 영상이 나온다.</h2></div><div class="body"><div class="row c3"><div class="card"><h4>수요는 있는데 편집이 벽</h4><p>비바샘 쇼츠 코너와 &#x27;교사가 유튜브를 해야 하는 이유&#x27; 같은 과정이 보여 주듯, 교사 영상 콘텐츠 수요는 이미 있습니다. 문제는 편집입니다. 프리미어·파이널컷은 배우는 데만 한 학기가 걸리고, 결국 안 씁니다. 브루는 자막이 자동으로 생기고 텍스트를 지우면 컷이 잘리기 때문에, 편집 경험이 없는 교사가 첫 시간에 결과물을 냅니다.</p></div><div class="card"><h4>난이도가 아니라 영상 종류로</h4><p>이 연수의 6차시는 &#x27;영상 한 편의 난이도&#x27;가 아니라 &#x27;교실에서 쓰는 영상의 종류&#x27;로 나눕니다. 설명 영상, AI 성우 영상, 학급 행사 영상, 학생 UCC, 쇼츠. 매 차시 한 종류를 끝까지 만들고, 다음 차시에서 그 결과물을 재료로 씁니다.</p></div><div class="card"><h4>마지막은 쌤크리에이터로</h4><p>마지막 차시는 쌤크리에이터로 이어집니다. 긴 수업 영상을 AI 요약으로 쇼츠로 자르고, 번역 자막을 붙이고, 비바샘 쇼츠·유튜브에 올리는 절차까지. 연수를 마친 선생님이 다음 샘크리에이티브 강사 후보가 되는 구조입니다.</p></div></div></div><aside class="nt" hidden>비바샘 쇼츠 코너와 유튜브 과정이 보여 주듯 수요는 있는데 편집이 벽이에요. 브루는 그 벽을 낮추고, 우리는 영상 종류별로 매 차시 한 편을 완성합니다.</aside></section>
-<section class="slide " data-ep="OPENING" data-title="대상 · 산출물" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">연수 대상 · 산출물</span><h2 class="s-title">편집 프로그램을 켰다 닫아 본 선생님을 위해</h2></div>
+<section class="slide soft" data-deck="vrew" data-ep="OPENING" data-title="기획 의도" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">기획 의도 · 왜 지금, 왜 이 도구인가</span><h2 class="s-title">선생님은 이미 매일 &#x27;말&#x27;로 수업한다. 브루는 그 말을 자막으로 받아 적고, 말이 곧 편집이 된다. 그래서 첫 시간부터 영상이 나온다.</h2></div><div class="body"><div class="row c3"><div class="card"><h4>수요는 있는데 편집이 벽</h4><p>비바샘 쇼츠 코너와 &#x27;교사가 유튜브를 해야 하는 이유&#x27; 같은 과정이 보여 주듯, 교사 영상 콘텐츠 수요는 이미 있습니다. 문제는 편집입니다. 프리미어·파이널컷은 배우는 데만 한 학기가 걸리고, 결국 안 씁니다. 브루는 자막이 자동으로 생기고 텍스트를 지우면 컷이 잘리기 때문에, 편집 경험이 없는 교사가 첫 시간에 결과물을 냅니다.</p></div><div class="card"><h4>난이도가 아니라 영상 종류로</h4><p>이 연수의 6차시는 &#x27;영상 한 편의 난이도&#x27;가 아니라 &#x27;교실에서 쓰는 영상의 종류&#x27;로 나눕니다. 설명 영상, AI 성우 영상, 학급 행사 영상, 학생 UCC, 쇼츠. 매 차시 한 종류를 끝까지 만들고, 다음 차시에서 그 결과물을 재료로 씁니다.</p></div><div class="card"><h4>마지막은 쌤크리에이터로</h4><p>마지막 차시는 쌤크리에이터로 이어집니다. 긴 수업 영상을 AI 요약으로 쇼츠로 자르고, 번역 자막을 붙이고, 비바샘 쇼츠·유튜브에 올리는 절차까지. 연수를 마친 선생님이 다음 샘크리에이티브 강사 후보가 되는 구조입니다.</p></div></div></div><aside class="nt" hidden>비바샘 쇼츠 코너와 유튜브 과정이 보여 주듯 수요는 있는데 편집이 벽이에요. 브루는 그 벽을 낮추고, 우리는 영상 종류별로 매 차시 한 편을 완성합니다.</aside></section>
+<section class="slide " data-deck="vrew" data-ep="OPENING" data-title="대상 · 산출물" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">연수 대상 · 산출물</span><h2 class="s-title">편집 프로그램을 켰다 닫아 본 선생님을 위해</h2></div>
   <div class="body"><div class="row c2">
     <div class="card"><h4>이런 선생님을 위해</h4><p style="font-size:21px;line-height:1.65">수업 설명 영상, 학급 행사 영상, 학생 UCC 활동을 해 보고 싶지만 편집 프로그램이 부담스러웠던 초·중등 교사. 스마트폰 촬영만 해 본 선생님 기준으로 설계.</p>
       <div class="callout" style="margin-top:22px;font-size:19px"><b>도구</b> · 브루 (Vrew)<br><span style="font-size:16px;color:var(--t2)">https://vrew.ai</span></div></div>
     <div class="card"><h4>연수를 마치면 손에 남는 것</h4><ol class="vsteps" style="margin-top:14px"><li>내 과목 개념 설명 영상 1편 (자막 완성)</li><li>AI 성우로 만든 동기유발 영상 1편</li><li>학급 행사 영상 1편 (초상권 처리 완료)</li><li>학생 UCC 활동 지도안 + 안전 체크리스트</li><li>쇼츠 3편 + 채널 업로드 세팅</li></ol></div>
   </div></div><aside class="nt" hidden>스마트폰 촬영만 해 본 선생님 기준이에요. 마치면 오른쪽 다섯 가지가 남습니다.</aside></section>
-<section class="slide soft" data-ep="OPENING" data-title="과정 소개" data-plan=""><div class="head" style="margin-bottom:24px"><span class="eyebrow">과정 소개 · 비바샘 과정소개 양식</span><h2 class="s-title">학습 목표 4 · 과정 특징 4</h2></div>
+<section class="slide soft" data-deck="vrew" data-ep="OPENING" data-title="과정 소개" data-plan=""><div class="head" style="margin-bottom:24px"><span class="eyebrow">과정 소개 · 비바샘 과정소개 양식</span><h2 class="s-title">학습 목표 4 · 과정 특징 4</h2></div>
   <div class="body"><div class="goals">
     <div class="card"><h4>학습 목표</h4><ol><li>브루의 음성 인식 자막과 텍스트 기반 컷 편집 원리를 이해하고, 화면 녹화·스마트폰 촬영 영상을 자막이 완성된 수업 영상으로 편집할 수 있다.</li><li>&#x27;텍스트로 비디오 만들기&#x27;와 AI 성우, 무료 이미지·영상 소스를 활용하여 촬영 없이 동기유발·설명 영상을 제작할 수 있다.</li><li>얼굴 모자이크·음악·인트로 기능으로 초상권과 저작권을 지키며 학급 행사 영상과 학생 UCC 활동을 안전하게 운영할 수 있다.</li><li>AI 요약·번역 자막·쇼츠 변환 기능으로 긴 수업 영상을 짧은 콘텐츠로 재가공하고, 유튜브·비바샘 쇼츠 등에 게시하는 절차를 실행할 수 있다.</li></ol></div>
     <div class="card"><h4>과정 특징</h4><ul><li>본 연수는 편집 경험이 없는 교사를 기준으로, 자막 자동 생성과 텍스트 컷 편집이라는 브루의 두 원리만으로 첫 차시부터 완성 영상을 내도록 구성하였다.</li><li>6차시를 영상 기술 난이도가 아니라 &#x27;교실에서 쓰는 영상 종류&#x27;(설명·AI 성우·행사·학생 UCC·쇼츠)로 나누고, 매 차시 한 편을 끝까지 완성한다.</li><li>학생과 함께 쓰는 차시에서는 초상권·저작권·안전한 공유 절차를 체크리스트로 제공하고, 실제 학급 UCC 수업 장면을 통해 운영 방법을 제시한다.</li><li>마지막 차시는 쌤크리에이터 입문으로 이어져, 수강자가 자신의 수업 영상을 쇼츠로 재가공해 채널에 올리는 전 과정을 다룬다.</li></ul></div>
   </div></div><aside class="nt" hidden>비바샘 과정소개 양식 그대로 학습목표 4개와 과정 특징 4개입니다.</aside></section>
-<section class="slide " data-ep="EP.01" data-title="1차시 · 브루 시작하기" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.01 · 1차시 · 25분</span><h2 class="s-title">브루 시작하기</h2><p class="s-lead">설치 · 자막 자동 생성 · 텍스트로 컷 편집 · 첫 영상 내보내기</p></div>
+<section class="slide " data-deck="vrew" data-ep="EP.01" data-title="1차시 · 브루 시작하기" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.01 · 1차시 · 25분</span><h2 class="s-title">브루 시작하기</h2><p class="s-lead">설치 · 자막 자동 생성 · 텍스트로 컷 편집 · 첫 영상 내보내기</p></div>
   <div class="body">
     <div class="cue"><div style="flex:2"><b>00:00 · 2분</b><span>오프닝</span></div><div style="flex:5"><b>02:00 · 5분</b><span>개념</span></div><div style="flex:12" class="hot"><b>07:00 · 12분</b><span>따라하기</span></div><div style="flex:4"><b>19:00 · 4분</b><span>수업 적용</span></div><div style="flex:2"><b>23:00 · 2분</b><span>정리·과제</span></div></div>
     <div class="sess">
@@ -546,7 +561,7 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   </div><aside class="nt" hidden>선생님, 영상 편집 프로그램 켰다가 그냥 닫아 보신 적 있으시죠? 오늘은 제가 폰으로 30초 말하고, 3분 뒤에 자막 달린 영상을 보여 드릴게요. 브루는 말이 곧 편집입니다. 첫 시간에 영상 한 편 나갑니다.
 
 [촬영 메모] 오프닝의 &#x27;30초 촬영 → 3분 뒤 결과&#x27; 컷은 실시간으로 촬영해 신뢰를 준다. 브루 설치 화면은 Windows·Mac 둘 다 캡처.</aside></section>
-<section class="slide soft" data-ep="EP.02" data-title="2차시 · 수업 설명 영상 만들기" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.02 · 2차시 · 25분</span><h2 class="s-title">수업 설명 영상 만들기</h2><p class="s-lead">화면 녹화 + 브루 · 무음 제거 · 강조 자막 · 챕터</p></div>
+<section class="slide soft" data-deck="vrew" data-ep="EP.02" data-title="2차시 · 수업 설명 영상 만들기" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.02 · 2차시 · 25분</span><h2 class="s-title">수업 설명 영상 만들기</h2><p class="s-lead">화면 녹화 + 브루 · 무음 제거 · 강조 자막 · 챕터</p></div>
   <div class="body">
     <div class="cue"><div style="flex:2"><b>00:00 · 2분</b><span>오프닝</span></div><div style="flex:4"><b>02:00 · 4분</b><span>개념</span></div><div style="flex:13" class="hot"><b>06:00 · 13분</b><span>따라하기</span></div><div style="flex:4"><b>19:00 · 4분</b><span>수업 적용</span></div><div style="flex:2"><b>23:00 · 2분</b><span>정리·과제</span></div></div>
     <div class="sess">
@@ -557,7 +572,7 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   </div><aside class="nt" hidden>두 번째 시간입니다. 오늘 만들 건 결석한 학생에게 보내는 5분 설명 영상이에요. 판서 화면을 녹화하고, 브루가 &#x27;음…&#x27; 하는 구간을 알아서 지워 주고, 핵심 단어에 자막을 키우면 끝입니다.
 
 [촬영 메모] 판서 녹화는 태블릿 화면 + 강사 음성. 무음 제거 전후 길이 차이를 자막으로 표기(예: 7분 20초 → 5분 05초).</aside></section>
-<section class="slide " data-ep="EP.03" data-title="3차시 · AI 목소리로 영상 만들기" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.03 · 3차시 · 25분</span><h2 class="s-title">AI 목소리로 영상 만들기</h2><p class="s-lead">텍스트로 비디오 · AI 성우 · 무료 소스 · 저작권</p></div>
+<section class="slide " data-deck="vrew" data-ep="EP.03" data-title="3차시 · AI 목소리로 영상 만들기" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.03 · 3차시 · 25분</span><h2 class="s-title">AI 목소리로 영상 만들기</h2><p class="s-lead">텍스트로 비디오 · AI 성우 · 무료 소스 · 저작권</p></div>
   <div class="body">
     <div class="cue"><div style="flex:2"><b>00:00 · 2분</b><span>오프닝</span></div><div style="flex:5"><b>02:00 · 5분</b><span>개념</span></div><div style="flex:12" class="hot"><b>07:00 · 12분</b><span>따라하기</span></div><div style="flex:4"><b>19:00 · 4분</b><span>수업 적용</span></div><div style="flex:2"><b>23:00 · 2분</b><span>정리·과제</span></div></div>
     <div class="sess">
@@ -568,7 +583,7 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   </div><aside class="nt" hidden>세 번째 시간은 촬영이 없습니다. 대본만 쓰면 AI 성우가 읽고, 브루가 장면마다 어울리는 이미지를 찾아 붙여 줍니다. 오늘은 과학 수업 도입용 2분 영상을 그렇게 만들어 볼게요.
 
 [촬영 메모] AI 성우 목소리 비교 컷 3종 준비. 자동 매칭된 이미지가 어색한 사례를 일부러 남겨 &#x27;교체&#x27; 과정을 보여 준다.</aside></section>
-<section class="slide soft" data-ep="EP.04" data-title="4차시 · 학급 행사 영상" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.04 · 4차시 · 25분</span><h2 class="s-title">학급 행사 영상</h2><p class="s-lead">사진 슬라이드 · 얼굴 모자이크 · 배경음악 · 인트로</p></div>
+<section class="slide soft" data-deck="vrew" data-ep="EP.04" data-title="4차시 · 학급 행사 영상" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.04 · 4차시 · 25분</span><h2 class="s-title">학급 행사 영상</h2><p class="s-lead">사진 슬라이드 · 얼굴 모자이크 · 배경음악 · 인트로</p></div>
   <div class="body">
     <div class="cue"><div style="flex:2"><b>00:00 · 2분</b><span>오프닝</span></div><div style="flex:4"><b>02:00 · 4분</b><span>개념</span></div><div style="flex:13" class="hot"><b>06:00 · 13분</b><span>따라하기</span></div><div style="flex:4"><b>19:00 · 4분</b><span>수업 적용</span></div><div style="flex:2"><b>23:00 · 2분</b><span>정리·과제</span></div></div>
     <div class="sess">
@@ -579,7 +594,7 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   </div><aside class="nt" hidden>네 번째 시간, 학급 행사 영상입니다. 학부모님이 가장 오래 간직하는 결과물이기도 하고, 초상권 때문에 가장 조심해야 하는 영상이기도 합니다. 오늘은 사진 30장으로 3분 영상을 만들면서 모자이크와 음악 저작권까지 한 번에 정리합니다.
 
 [촬영 메모] 예시 사진은 연구회 행사 사진(동의 확보분) 사용. 모자이크 적용 전후를 분할 화면으로 편집.</aside></section>
-<section class="slide " data-ep="EP.05" data-title="5차시 · 학생과 함께 브루" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.05 · 5차시 · 25분</span><h2 class="s-title">학생과 함께 브루</h2><p class="s-lead">학생 UCC · 뉴스 만들기 · 발표 영상 · 안전한 공유</p></div>
+<section class="slide " data-deck="vrew" data-ep="EP.05" data-title="5차시 · 학생과 함께 브루" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.05 · 5차시 · 25분</span><h2 class="s-title">학생과 함께 브루</h2><p class="s-lead">학생 UCC · 뉴스 만들기 · 발표 영상 · 안전한 공유</p></div>
   <div class="body">
     <div class="cue"><div style="flex:2"><b>00:00 · 2분</b><span>오프닝</span></div><div style="flex:5"><b>02:00 · 5분</b><span>개념</span></div><div style="flex:11" class="hot"><b>07:00 · 11분</b><span>따라하기</span></div><div style="flex:5"><b>18:00 · 5분</b><span>수업 적용</span></div><div style="flex:2"><b>23:00 · 2분</b><span>정리·과제</span></div></div>
     <div class="sess">
@@ -590,7 +605,7 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   </div><aside class="nt" hidden>다섯 번째 시간, 이제 학생이 편집합니다. 학생이 만든 1분 뉴스 영상부터 보여 드릴게요. 대본 쓰고, 찍고, 브루로 자막 달고, 선생님이 검수해서 학급에서 상영하는 3차시 흐름을 그대로 가져갑니다.
 
 [촬영 메모] 학생 촬영은 비식별(뒷모습·손·화면) 원칙, 보호자 동의. 교사 검수 화면(부적절 내용·초상권)을 반드시 포함.</aside></section>
-<section class="slide soft" data-ep="EP.06" data-title="6차시 · AI로 브루 끝내기 · 쌤크리에이터 첫걸음" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.06 · 6차시 · 25분</span><h2 class="s-title">AI로 브루 끝내기 · 쌤크리에이터 첫걸음</h2><p class="s-lead">AI 요약 → 쇼츠 · 번역 자막 · 썸네일 · 채널 업로드</p></div>
+<section class="slide soft" data-deck="vrew" data-ep="EP.06" data-title="6차시 · AI로 브루 끝내기 · 쌤크리에이터 첫걸음" data-plan="25분"><div class="head" style="margin-bottom:14px"><span class="eyebrow">EP.06 · 6차시 · 25분</span><h2 class="s-title">AI로 브루 끝내기 · 쌤크리에이터 첫걸음</h2><p class="s-lead">AI 요약 → 쇼츠 · 번역 자막 · 썸네일 · 채널 업로드</p></div>
   <div class="body">
     <div class="cue"><div style="flex:2"><b>00:00 · 2분</b><span>오프닝</span></div><div style="flex:4"><b>02:00 · 4분</b><span>개념</span></div><div style="flex:13" class="hot"><b>06:00 · 13분</b><span>따라하기</span></div><div style="flex:4"><b>19:00 · 4분</b><span>수업 적용</span></div><div style="flex:2"><b>23:00 · 2분</b><span>정리·과제</span></div></div>
     <div class="sess">
@@ -601,23 +616,23 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   </div><aside class="nt" hidden>마지막 시간입니다. 2차시에 만든 5분 설명 영상, 기억나시죠? 오늘 그 영상이 쇼츠 세 편이 되고, 베트남어 자막이 붙고, 채널에 올라갑니다. 여기까지 오신 선생님은 이미 크리에이터예요.
 
 [촬영 메모] 업로드는 비공개 설정으로 시연. 비바샘 쇼츠 화면 캡처는 비바샘 측 사용 허락 확인 후 사용.</aside></section>
-<section class="slide soft" data-ep="WRAP" data-title="교실 장면" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">교실 장면 · 연수 수강 후</span><h2 class="s-title">연수를 들은 다음 주, 교실에서 벌어지는 일</h2></div><div class="body"><div class="row c3"><div class="card"><span class="pill p-info">초 5 · 수학</span><h4 style="margin-top:14px">결석생 보충 영상</h4><p>결석한 학생에게 5분 설명 영상을 보내고, 다음 날 질문만 받습니다. 판서 녹화 15분이면 영상이 준비됩니다.</p></div><div class="card"><span class="pill p-info">초 4 · 국어</span><h4 style="margin-top:14px">우리 학교 뉴스 3차시</h4><p>모둠이 기자·촬영·편집을 나눠 1분 뉴스를 만듭니다. 브루 자막 덕에 편집 시간이 한 차시 안에 끝나고, 학급 상영회로 마무리합니다.</p></div><div class="card"><span class="pill p-info">학급 운영</span><h4 style="margin-top:14px">학년 말 학급 영상</h4><p>1년치 사진과 영상 클립으로 3분 영상을 만들고, 동의 없는 얼굴은 자동 모자이크. 학부모 공개수업과 졸업식에 상영합니다.</p></div></div></div><aside class="nt" hidden>결석생 보충 영상, 우리 학교 뉴스 3차시, 학년 말 학급 영상. 세 장면 모두 초상권 처리까지 포함해요.</aside></section>
-<section class="slide " data-ep="WRAP" data-title="이수 · 제작 일정" data-plan=""><div class="head" style="margin-bottom:24px"><span class="eyebrow">이수 기준 · 제작 일정</span><h2 class="s-title">비바샘 샘크리에이티브 연수 기준 그대로</h2></div>
+<section class="slide soft" data-deck="vrew" data-ep="WRAP" data-title="교실 장면" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">교실 장면 · 연수 수강 후</span><h2 class="s-title">연수를 들은 다음 주, 교실에서 벌어지는 일</h2></div><div class="body"><div class="row c3"><div class="card"><span class="pill p-info">초 5 · 수학</span><h4 style="margin-top:14px">결석생 보충 영상</h4><p>결석한 학생에게 5분 설명 영상을 보내고, 다음 날 질문만 받습니다. 판서 녹화 15분이면 영상이 준비됩니다.</p></div><div class="card"><span class="pill p-info">초 4 · 국어</span><h4 style="margin-top:14px">우리 학교 뉴스 3차시</h4><p>모둠이 기자·촬영·편집을 나눠 1분 뉴스를 만듭니다. 브루 자막 덕에 편집 시간이 한 차시 안에 끝나고, 학급 상영회로 마무리합니다.</p></div><div class="card"><span class="pill p-info">학급 운영</span><h4 style="margin-top:14px">학년 말 학급 영상</h4><p>1년치 사진과 영상 클립으로 3분 영상을 만들고, 동의 없는 얼굴은 자동 모자이크. 학부모 공개수업과 졸업식에 상영합니다.</p></div></div></div><aside class="nt" hidden>결석생 보충 영상, 우리 학교 뉴스 3차시, 학년 말 학급 영상. 세 장면 모두 초상권 처리까지 포함해요.</aside></section>
+<section class="slide " data-deck="vrew" data-ep="WRAP" data-title="이수 · 제작 일정" data-plan=""><div class="head" style="margin-bottom:24px"><span class="eyebrow">이수 기준 · 제작 일정</span><h2 class="s-title">비바샘 샘크리에이티브 연수 기준 그대로</h2></div>
   <div class="body"><div class="row c2">
     <div class="card"><h4>평가 비율</h4><div class="ratio"><div><span style="text-align:left;color:var(--t1)">진도율</span><i><b style="--w:90%"></b></i><span>90%</span></div><div><span style="text-align:left;color:var(--t1)">시험</span><i><b style="--w:0%"></b></i><span>0%</span></div><div><span style="text-align:left;color:var(--t1)">의견등록</span><i><b style="--w:100%"></b></i><span>100%</span></div></div><p class="foot" style="font-size:16.5px;margin-top:20px">이수 기준: 진도율 90% 이상, 의견등록 총점 100점 만점에 60점 이상. (비바샘 샘크리에이티브 캔바 6차시 과정과 동일 기준)</p></div>
     <div class="card"><h4>제작 일정 (예시 · 조정 가능)</h4><ol class="vsteps" style="margin-top:14px"><li><span><b>기획 확정</b> · <span style="color:var(--blue);font-weight:800">2026. 10</span><small>차시별 큐시트 확정, 예시 교과 차시·행사 사진(동의분) 확보, 비바샘 담당자 검토</small></span></li><li><span><b>촬영</b> · <span style="color:var(--blue);font-weight:800">2026. 11</span><small>화면녹화 6차시 + 강사 카메라, 교실 UCC 현장(5차시), 판서 녹화(2차시)</small></span></li><li><span><b>편집·검수</b> · <span style="color:var(--blue);font-weight:800">2026. 12</span><small>브루 버전 표기, 초상권·저작권 검수, 수강자용 대본·체크리스트 파일 정리</small></span></li><li><span><b>오픈</b> · <span style="color:var(--blue);font-weight:800">2027. 1</span><small>비바샘 샘크리에이티브 연수 등록, 쇼츠 예고편 3편 선공개</small></span></li></ol></div>
   </div></div><aside class="nt" hidden>이수 기준은 비바샘 기준 그대로, 제작 일정은 예시예요.</aside></section>
-<section class="slide dark" data-ep="WRAP" data-title="차별점 · 연계" data-plan=""><div class="head" style="margin-bottom:22px"><span class="eyebrow">차별점 · 기존 과정과 어떻게 다른가</span><h2 class="s-title">기능 설명이 아니라 영상 종류별 완성작 여섯 편</h2></div>
+<section class="slide dark" data-deck="vrew" data-ep="WRAP" data-title="차별점 · 연계" data-plan=""><div class="head" style="margin-bottom:22px"><span class="eyebrow">차별점 · 기존 과정과 어떻게 다른가</span><h2 class="s-title">기능 설명이 아니라 영상 종류별 완성작 여섯 편</h2></div>
   <div class="body">
     <div class="tcard"><table class="tt"><thead><tr><th>기존 · 유사 과정</th><th>이 연수</th></tr></thead><tbody><tr><td style='width:42%'>기존 브루 과정: 기능 이해 → Gen2 연계 → 동기유발 영상</td><td>영상 &#x27;종류&#x27;별 6차시(설명·AI 성우·행사·학생 UCC·쇼츠), 매 차시 완성작 1편</td></tr><tr><td style='width:42%'>편집 기술 설명 위주</td><td>촬영 30초 → 3분 뒤 결과물처럼 &#x27;시간&#x27;을 보여 주는 실시간 시연</td></tr><tr><td style='width:42%'>학생 활용은 아이디어 제시</td><td>초상권·저작권·검수 절차를 체크리스트와 현장 장면으로 제공</td></tr><tr><td style='width:42%'>영상 완성으로 종료</td><td>앞 차시 영상을 쇼츠·번역 자막으로 재가공해 쌤크리에이터 지원까지 연결</td></tr></tbody></table></div>
     <p class="foot" style="margin-top:18px;color:#8FA0B5">연계 추천 과정(비바샘 내)</p><div class="chips" style="margin-top:8px"><span class="chip">교사가 유튜브를 해야하는 이유 (쇼츠)</span><span class="chip">클래스가 다른 샘크리에이터! 교육 콘텐츠로 시작하는 교사 퍼스널 브랜딩</span><span class="chip">6차시 완성! 캔바로 수업·디자인 한 번에</span><span class="chip">(본 시리즈) 미리캔버스 6차시 · 피지컬 AI 6차시</span></div>
   </div><aside class="nt" hidden>기존 브루 과정과 나란히 놓았어요. 기능 설명이 아니라 영상 종류별 완성작, 그리고 쌤크리에이터 연결이 차이입니다.</aside></section>
-<section class="slide soft" data-ep="WRAP" data-title="강사 · 근거" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">강사 · 형식 근거</span><h2 class="s-title">누가, 무엇을 근거로 만드는가</h2></div>
+<section class="slide soft" data-deck="vrew" data-ep="WRAP" data-title="강사 · 근거" data-plan=""><div class="head" style="margin-bottom:28px"><span class="eyebrow">강사 · 형식 근거</span><h2 class="s-title">누가, 무엇을 근거로 만드는가</h2></div>
   <div class="body"><div class="row c2">
     <div class="card"><div class="inst"><div class="av">Q</div><div><h4>두목쿼카 (초등교사)</h4><div class="role">경기 AI융합교육연구회 Q.U.O.K.A 회장 · 공동 강사: 쿼카연구회 1~2인(미정)</div><p>연수·행사 영상, 학생 활동 영상, 앱 소개 영상을 브루로 직접 제작해 온 현장 교사. 네이버 블로그와 연구회 채널을 운영하며 &#x27;편집 없이 말로 만드는 영상&#x27; 워크플로를 정리했습니다.</p></div></div></div>
     <div class="card src-grid" style="display:block"><h4>형식 근거 · 미정 항목</h4><ul style="margin-top:12px"><li>형식 근거: 비바샘 샘크리에이티브 연수 <a href="https://t.vivasam.com/sam-studio/sam-creative/t25-033" target="_blank" rel="noopener">6차시 완성! 캔바로 수업·디자인 한 번에</a> (직무/6차시, 30,000원, 진도율 90%·의견등록 100%)</li><li>기존 브루 과정(비바샘): 브루 기능 이해 → Gen2 연계 → 동기유발 영상. 이 기획은 영상 종류별 6차시로 차별화</li><li>미정: 공동 강사, 연수비, 촬영·오픈 일정, 비바샘 쇼츠 화면 사용 허락</li><li>작성 2026. 9. 25 · 초안 v0.2</li></ul></div>
   </div></div><aside class="nt" hidden>강사는 두목쿼카와 쿼카연구회 1~2인. 비바샘 쇼츠 화면 사용은 허락을 받아야 해요.</aside></section>
-<section class="slide dark closing" data-ep="WRAP" data-title="클로징" data-plan="">
+<section class="slide dark closing" data-deck="vrew" data-ep="WRAP" data-title="클로징" data-plan="">
   <div class="shade"></div>
   <div class="cl-in"><h2>선생님의 수업이<br>영상이 되어<br>ON AIR 됩니다</h2><p>설명 영상 한 편에서 시작해 쇼츠 세 편과 채널까지. 6차시를 마친 선생님이 다음 샘크리에이터 강사 후보가 되는 구조예요.</p><div class="thanks"><span>공동 강사 섭외</span><span>행사 사진 동의 확보</span><span>촬영 11월</span></div></div><aside class="nt" hidden>마무리입니다. 6차시를 마친 선생님이 다음 샘크리에이터 강사 후보가 되는 구조예요.</aside></section>
 
@@ -628,6 +643,7 @@ body.editing #nBody{outline:2px dashed rgba(143,187,250,.6);outline-offset:6px;b
   <span class="tk-ep" id="tkEp"></span>
 </div>
 </div>
+
 
 <nav class="dock" id="dock" aria-label="발표 조작">
   <button type="button" id="bPrev" aria-label="이전"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -691,9 +707,38 @@ const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const stage = $('#stage');
-const slides = $$('#stage > .slide');
-const N = slides.length;
+const ALL = $$('#stage > .slide');
+let DECKS = [];
+try { DECKS = JSON.parse($('#deckMeta').textContent || '[]'); } catch(e){}
+let deckId = '', slides = ALL, N = ALL.length;
 let cur = 0, scrollMode = false;
+const MULTI = DECKS.length > 1;
+
+/* ---------- deck switcher (합본) ---------- */
+function setTicker(list){
+  const h = (list || []).map(t => `<span><b>${esc(t[0])}</b>${esc(t[1])}</span>`).join('');
+  $('#tkRun').innerHTML = h + h;
+}
+function pickDeck(id){
+  const m = DECKS.find(x => x.id === id) || DECKS[0] || {};
+  deckId = m.id || '';
+  slides = deckId ? ALL.filter(s => !s.dataset.deck || s.dataset.deck === deckId) : ALL;
+  N = slides.length;
+  ALL.forEach(s => s.classList.toggle('off', slides.indexOf(s) < 0));
+  const pn = $('#progName'); if (pn && m.prog) pn.textContent = m.prog;
+  $$('[data-deck-pick]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.deckPick === deckId)));
+  setTicker(m.ticker || []);
+}
+function switchDeck(id, idx){
+  if (id === deckId) return;
+  const was = slides[cur];
+  if (was){ was.classList.remove('on', 'prev'); }
+  pickDeck(id);
+  buildToc();
+  cur = Math.max(0, Math.min(N - 1, idx || 0));
+  if (scrollMode){ slides.forEach(s => { s.classList.add('on'); s.classList.remove('prev'); setupSteps(s, true); }); layout(); slides[cur].scrollIntoView({block:'start'}); updateChrome(); }
+  else { const c = cur; cur = -1; go(c); }
+}
 
 /* ---------- BGM (synthesized in the browser) ---------- */
 const BGM = (function(){
@@ -761,7 +806,7 @@ function setupSteps(s, showAll){
 function go(i, opts){
   i = Math.max(0, Math.min(N - 1, i));
   if (scrollMode){ slides[i].scrollIntoView({behavior:'smooth', block:'start'}); cur = i; updateChrome(); return; }
-  const prev = slides[cur];
+  const prev = cur >= 0 ? slides[cur] : null;
   if (prev && prev !== slides[i]){ prev.classList.remove('on'); prev.classList.toggle('prev', i > cur); }
   const back = opts && opts.back;
   cur = i;
@@ -776,7 +821,7 @@ function updateChrome(){
   epTag.textContent = s.dataset.ep; counter.textContent = `${cur + 1} / ${N}`; dockPg.textContent = `${cur + 1} / ${N}`;
   prog.style.width = ((cur + 1) / N * 100) + '%'; tkEp.textContent = s.dataset.title;
   stage.classList.toggle('is-dark', s.classList.contains('dark'));
-  try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e){}
+  try { history.replaceState(null, '', '#' + (MULTI ? deckId + '/' : '') + 's' + (cur + 1)); } catch(e){}
   renderNotes(); markToc();
 }
 function next(){
@@ -860,10 +905,7 @@ dock.addEventListener('mouseenter', () => clearTimeout(idleT));
 wake();
 
 /* ---------- ticker & clock ---------- */
-let TK = [];
-try { TK = JSON.parse($('#deckTicker').textContent || '[]'); } catch(e){}
-const tkHTML = TK.map(t => `<span><b>${esc(t[0])}</b>${esc(t[1])}</span>`).join('');
-$('#tkRun').innerHTML = tkHTML + tkHTML;
+document.addEventListener('click', e => { const b = e.target.closest('[data-deck-pick]'); if (b && !document.body.classList.contains('editing')) switchDeck(b.dataset.deckPick, 0); });
 function clock(){ const d = new Date(); $('#clock').textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 clock(); setInterval(clock, 15000);
 
@@ -894,7 +936,7 @@ const Edit = (function(){
   const SKIP = '.nt,svg,canvas,video,button:not(.ag)';
   const hash = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
   const ED = [], byKey = new Map(), noteOrig = new Map();
-  slides.forEach((s, si) => {
+  ALL.forEach((s, si) => {
     let k = 0;
     const walk = el => {
       for (const c of Array.from(el.children)){
@@ -924,7 +966,7 @@ const Edit = (function(){
 
   function apply(){
     ED.forEach(x => { const e = state.t[x.key]; const html = (e && e.h === x.h && typeof e.html === 'string') ? e.html : x.orig; if (x.el.innerHTML !== html) x.el.innerHTML = html; });
-    slides.forEach((s, i) => { const nt = $('.nt', s); if (nt) nt.textContent = typeof state.n[i] === 'string' ? state.n[i] : noteOrig.get(i); });
+    ALL.forEach((s, i) => { const nt = $('.nt', s); if (nt) nt.textContent = typeof state.n[i] === 'string' ? state.n[i] : noteOrig.get(i); });
     renderNotes(); count();
   }
   function count(){
@@ -977,7 +1019,7 @@ const Edit = (function(){
     if (!editing) return;
     const el = e.target.closest && e.target.closest('[data-ed]');
     if (el){ const x = byKey.get(el.dataset.ed); if (!x) return; if (el.innerHTML === x.orig) delete state.t[x.key]; else state.t[x.key] = {h:x.h, html:el.innerHTML}; dirty(); return; }
-    if (e.target.id === 'nBody'){ const i = cur, txt = e.target.innerText.replace(/\n{3,}/g, '\n\n'); const nt = $('.nt', slides[i]); if (nt) nt.textContent = txt; if (txt.trim() === (noteOrig.get(i) || '').trim()) delete state.n[i]; else state.n[i] = txt; dirty(); }
+    if (e.target.id === 'nBody'){ const i = ALL.indexOf(slides[cur]), txt = e.target.innerText.replace(/\n{3,}/g, '\n\n'); const nt = $('.nt', slides[i]); if (nt) nt.textContent = txt; if (txt.trim() === (noteOrig.get(i) || '').trim()) delete state.n[i]; else state.n[i] = txt; dirty(); }
   });
   document.addEventListener('paste', e => {
     if (!editing || !(e.target.closest && (e.target.closest('[data-ed]') || e.target.closest('#nBody')))) return;
@@ -1088,11 +1130,14 @@ const Edit = (function(){
 
 window.__deck = {cur: () => cur, slides, refreshNotes: renderNotes, isScroll: () => scrollMode};
 /* ---------- start ---------- */
-const m = /^#s(\d+)$/.exec(location.hash || '');
-cur = m ? Math.max(0, Math.min(N - 1, +m[1] - 1)) : 0;
+const HASH = /^#(?:([\w-]+)\/)?s(\d+)$/;
+const m = HASH.exec(location.hash || '');
+pickDeck(m && m[1] ? m[1] : (DECKS[0] || {}).id);
+buildToc();
+cur = m ? Math.max(0, Math.min(N - 1, +m[2] - 1)) : 0;
 layout();
 if (!scrollMode) go(cur); else updateChrome();
-window.addEventListener('hashchange', () => { const h = /^#s(\d+)$/.exec(location.hash || ''); if (h && +h[1] - 1 !== cur) go(+h[1] - 1); });
+window.addEventListener('hashchange', () => { const h = HASH.exec(location.hash || ''); if (!h) return; if (MULTI && h[1] && h[1] !== deckId){ switchDeck(h[1], +h[2] - 1); return; } if (+h[2] - 1 !== cur) go(+h[2] - 1); });
 })();
 
 </script>

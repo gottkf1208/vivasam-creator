@@ -5,9 +5,38 @@ const $ = (s, r) => (r || document).querySelector(s);
 const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const stage = $('#stage');
-const slides = $$('#stage > .slide');
-const N = slides.length;
+const ALL = $$('#stage > .slide');
+let DECKS = [];
+try { DECKS = JSON.parse($('#deckMeta').textContent || '[]'); } catch(e){}
+let deckId = '', slides = ALL, N = ALL.length;
 let cur = 0, scrollMode = false;
+const MULTI = DECKS.length > 1;
+
+/* ---------- deck switcher (합본) ---------- */
+function setTicker(list){
+  const h = (list || []).map(t => `<span><b>${esc(t[0])}</b>${esc(t[1])}</span>`).join('');
+  $('#tkRun').innerHTML = h + h;
+}
+function pickDeck(id){
+  const m = DECKS.find(x => x.id === id) || DECKS[0] || {};
+  deckId = m.id || '';
+  slides = deckId ? ALL.filter(s => !s.dataset.deck || s.dataset.deck === deckId) : ALL;
+  N = slides.length;
+  ALL.forEach(s => s.classList.toggle('off', slides.indexOf(s) < 0));
+  const pn = $('#progName'); if (pn && m.prog) pn.textContent = m.prog;
+  $$('[data-deck-pick]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.deckPick === deckId)));
+  setTicker(m.ticker || []);
+}
+function switchDeck(id, idx){
+  if (id === deckId) return;
+  const was = slides[cur];
+  if (was){ was.classList.remove('on', 'prev'); }
+  pickDeck(id);
+  buildToc();
+  cur = Math.max(0, Math.min(N - 1, idx || 0));
+  if (scrollMode){ slides.forEach(s => { s.classList.add('on'); s.classList.remove('prev'); setupSteps(s, true); }); layout(); slides[cur].scrollIntoView({block:'start'}); updateChrome(); }
+  else { const c = cur; cur = -1; go(c); }
+}
 
 /* ---------- BGM (synthesized in the browser) ---------- */
 const BGM = (function(){
@@ -75,7 +104,7 @@ function setupSteps(s, showAll){
 function go(i, opts){
   i = Math.max(0, Math.min(N - 1, i));
   if (scrollMode){ slides[i].scrollIntoView({behavior:'smooth', block:'start'}); cur = i; updateChrome(); return; }
-  const prev = slides[cur];
+  const prev = cur >= 0 ? slides[cur] : null;
   if (prev && prev !== slides[i]){ prev.classList.remove('on'); prev.classList.toggle('prev', i > cur); }
   const back = opts && opts.back;
   cur = i;
@@ -90,7 +119,7 @@ function updateChrome(){
   epTag.textContent = s.dataset.ep; counter.textContent = `${cur + 1} / ${N}`; dockPg.textContent = `${cur + 1} / ${N}`;
   prog.style.width = ((cur + 1) / N * 100) + '%'; tkEp.textContent = s.dataset.title;
   stage.classList.toggle('is-dark', s.classList.contains('dark'));
-  try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e){}
+  try { history.replaceState(null, '', '#' + (MULTI ? deckId + '/' : '') + 's' + (cur + 1)); } catch(e){}
   renderNotes(); markToc();
 }
 function next(){
@@ -174,10 +203,7 @@ dock.addEventListener('mouseenter', () => clearTimeout(idleT));
 wake();
 
 /* ---------- ticker & clock ---------- */
-let TK = [];
-try { TK = JSON.parse($('#deckTicker').textContent || '[]'); } catch(e){}
-const tkHTML = TK.map(t => `<span><b>${esc(t[0])}</b>${esc(t[1])}</span>`).join('');
-$('#tkRun').innerHTML = tkHTML + tkHTML;
+document.addEventListener('click', e => { const b = e.target.closest('[data-deck-pick]'); if (b && !document.body.classList.contains('editing')) switchDeck(b.dataset.deckPick, 0); });
 function clock(){ const d = new Date(); $('#clock').textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 clock(); setInterval(clock, 15000);
 
@@ -208,7 +234,7 @@ const Edit = (function(){
   const SKIP = '.nt,svg,canvas,video,button:not(.ag)';
   const hash = s => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return (h >>> 0).toString(36); };
   const ED = [], byKey = new Map(), noteOrig = new Map();
-  slides.forEach((s, si) => {
+  ALL.forEach((s, si) => {
     let k = 0;
     const walk = el => {
       for (const c of Array.from(el.children)){
@@ -238,7 +264,7 @@ const Edit = (function(){
 
   function apply(){
     ED.forEach(x => { const e = state.t[x.key]; const html = (e && e.h === x.h && typeof e.html === 'string') ? e.html : x.orig; if (x.el.innerHTML !== html) x.el.innerHTML = html; });
-    slides.forEach((s, i) => { const nt = $('.nt', s); if (nt) nt.textContent = typeof state.n[i] === 'string' ? state.n[i] : noteOrig.get(i); });
+    ALL.forEach((s, i) => { const nt = $('.nt', s); if (nt) nt.textContent = typeof state.n[i] === 'string' ? state.n[i] : noteOrig.get(i); });
     renderNotes(); count();
   }
   function count(){
@@ -291,7 +317,7 @@ const Edit = (function(){
     if (!editing) return;
     const el = e.target.closest && e.target.closest('[data-ed]');
     if (el){ const x = byKey.get(el.dataset.ed); if (!x) return; if (el.innerHTML === x.orig) delete state.t[x.key]; else state.t[x.key] = {h:x.h, html:el.innerHTML}; dirty(); return; }
-    if (e.target.id === 'nBody'){ const i = cur, txt = e.target.innerText.replace(/\n{3,}/g, '\n\n'); const nt = $('.nt', slides[i]); if (nt) nt.textContent = txt; if (txt.trim() === (noteOrig.get(i) || '').trim()) delete state.n[i]; else state.n[i] = txt; dirty(); }
+    if (e.target.id === 'nBody'){ const i = ALL.indexOf(slides[cur]), txt = e.target.innerText.replace(/\n{3,}/g, '\n\n'); const nt = $('.nt', slides[i]); if (nt) nt.textContent = txt; if (txt.trim() === (noteOrig.get(i) || '').trim()) delete state.n[i]; else state.n[i] = txt; dirty(); }
   });
   document.addEventListener('paste', e => {
     if (!editing || !(e.target.closest && (e.target.closest('[data-ed]') || e.target.closest('#nBody')))) return;
@@ -402,9 +428,12 @@ const Edit = (function(){
 
 window.__deck = {cur: () => cur, slides, refreshNotes: renderNotes, isScroll: () => scrollMode};
 /* ---------- start ---------- */
-const m = /^#s(\d+)$/.exec(location.hash || '');
-cur = m ? Math.max(0, Math.min(N - 1, +m[1] - 1)) : 0;
+const HASH = /^#(?:([\w-]+)\/)?s(\d+)$/;
+const m = HASH.exec(location.hash || '');
+pickDeck(m && m[1] ? m[1] : (DECKS[0] || {}).id);
+buildToc();
+cur = m ? Math.max(0, Math.min(N - 1, +m[2] - 1)) : 0;
 layout();
 if (!scrollMode) go(cur); else updateChrome();
-window.addEventListener('hashchange', () => { const h = /^#s(\d+)$/.exec(location.hash || ''); if (h && +h[1] - 1 !== cur) go(+h[1] - 1); });
+window.addEventListener('hashchange', () => { const h = HASH.exec(location.hash || ''); if (!h) return; if (MULTI && h[1] && h[1] !== deckId){ switchDeck(h[1], +h[2] - 1); return; } if (+h[2] - 1 !== cur) go(+h[2] - 1); });
 })();
