@@ -126,7 +126,8 @@ def build_slides(d):
         outs = "".join(f"<li>{e(o)}</li>" for o in s["outputs"])
         prep = "".join(f"<li>{e(o)}</li>" for o in s["prep"])
         pills = "".join(f'<span class="pill p-info">{e(m)}</span>' for m in s["mode"])
-        body = head(f"{ep} · {s['n']}차시 · {per[i]}분", s["title"], s["sub"], mb=14) + f"""
+        lesson = f'<a class="lesson-link" href="{e(s["lesson"])}" target="_blank" rel="noopener">▶ {e(s.get("lessonLabel", "연수 보기"))}</a>' if s.get("lesson") else ""
+        body = head(f"{ep} · {s['n']}차시 · {per[i]}분", s["title"], s["sub"], mb=14) + lesson + f"""
   <div class="body">
     <div class="cue">{''.join(cue)}</div>
     <div class="sess">

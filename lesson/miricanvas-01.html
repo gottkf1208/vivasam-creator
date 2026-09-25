@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미리캔버스 1차시 · 시작하기</title>
+<meta name="description" content="비바샘 샘크리에이티브 연수 · 미리캔버스 6차시 중 1차시. 실제 화면을 따라가며 25분 안에 학급 이름표 한 장을 완성해요.">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --aqua:#2BB3C9; --aqua-deep:#127E90; --aqua-pale:#E4F6F9;
+  --orange:#F2812D; --orange-pale:#FDEFE3; --orange-deep:#B3520F;
+  --ink:#1B1F24; --bg:#FAFBFC; --paper:#F3F5F7; --line:#E4E8EC; --muted:#5F6B76; --faint:#9AA5AF;
+  --r-lg:22px; --r:16px; --shadow:0 18px 50px -30px rgba(27,31,36,.28);
+  --sans:"Pretendard Variable",Pretendard,-apple-system,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --mono:"SF Mono","Cascadia Mono",Consolas,ui-monospace,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--aqua-deep)}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+@media(min-width:900px){.wrap{padding:0 28px}}
+kbd{font-family:var(--mono);font-size:11.5px;font-weight:600;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:2px 7px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:14px;border:1px solid var(--line);background:#fff;font-weight:700;font-size:14.5px;transition:transform .15s,background .15s;white-space:nowrap}
+.btn:hover{background:var(--paper)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.aqua{background:var(--aqua);color:#fff;border-color:var(--aqua)}
+.btn.small{height:36px;padding:0 12px;font-size:13px;border-radius:11px}
+.btn[aria-pressed="true"]{background:var(--aqua-pale);border-color:var(--aqua);color:var(--aqua-deep)}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+:focus-visible{outline:3px solid var(--aqua);outline-offset:2px;border-radius:8px}
+
+/* ---------- top ---------- */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;text-decoration:none;color:var(--ink)}
+.brand i{width:30px;height:30px;border-radius:10px;background:var(--aqua);display:inline-flex;align-items:center;justify-content:center;color:#fff;font-style:normal;font-weight:900;font-size:14px}
+.top nav{display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{font-size:13.5px;font-weight:600;color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px}
+.top nav a:hover{background:var(--paper);color:var(--ink)}
+
+.hero{padding:22px 0 20px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;color:var(--aqua-deep);letter-spacing:.02em;margin-bottom:12px}
+.eyebrow b{background:var(--aqua-pale);padding:4px 10px;border-radius:999px}
+h1{font-size:clamp(28px,4.6vw,46px);line-height:1.2;font-weight:800;letter-spacing:-.03em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--orange)}
+.sub{font-size:clamp(15px,1.7vw,18px);color:var(--muted);margin-top:12px;max-width:760px;text-wrap:pretty}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chip{font-size:13.5px;font-weight:700;color:var(--muted);background:#fff;border:1px solid var(--line);padding:8px 13px;border-radius:999px}
+.chip b{color:var(--ink)}
+
+/* ---------- theater ---------- */
+.theater-grid{display:grid;gap:18px;margin-top:8px}
+@media(min-width:1000px){.theater-grid{grid-template-columns:minmax(0,1fr) 320px;align-items:start}}
+.theater{position:relative;border-radius:var(--r-lg);background:#fff;border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow)}
+.stage-wrap{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;background:#EEF1F4}
+.stage{position:absolute;left:0;top:0;width:1440px;height:900px;transform-origin:0 0;overflow:hidden;background:#fff}
+.stage>*{position:absolute}
+.shot{left:0;top:0;width:1440px;height:900px;transform-origin:0 0;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.shot img{display:block;width:1440px;height:900px}
+.hl{position:absolute;border:5px solid var(--orange);border-radius:16px;box-shadow:0 0 0 6px rgba(242,129,45,.22),0 0 0 9999px rgba(27,31,36,.28);pointer-events:none;opacity:0;transition:opacity .4s}
+.hl.on{opacity:1}
+.hl.aqua{border-color:var(--aqua);box-shadow:0 0 0 6px rgba(43,179,201,.22),0 0 0 9999px rgba(27,31,36,.28)}
+.hl .tag{position:absolute;left:-5px;top:-5px;transform:translateY(-100%);margin-top:-10px;background:var(--orange);color:#fff;font-size:22px;font-weight:800;padding:8px 16px;border-radius:12px;white-space:nowrap;letter-spacing:-.01em}
+.hl.aqua .tag{background:var(--aqua-deep)}
+.hl.below .tag{top:auto;bottom:-5px;transform:translateY(100%);margin:10px 0 0}
+.step-no{left:32px;top:24px;display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.92);padding:8px 16px;border-radius:14px;z-index:3;border:1px solid var(--line)}
+.step-no b{color:var(--aqua-deep);font-weight:800}
+/* 말하기 장면 */
+.talk{left:0;top:0;width:1440px;height:900px;background:var(--bg)}
+.talk .q{position:absolute;left:70px;bottom:0;width:360px}
+.talk .q img{width:100%;display:block}
+.talk .bubble{position:absolute;background:#fff;border:3px solid var(--ink);border-radius:28px;padding:26px 32px;font-size:34px;font-weight:700;line-height:1.45;letter-spacing:-.02em}
+.talk .bubble::after{content:"";position:absolute;left:-16px;top:44px;width:24px;height:24px;background:#fff;border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
+.talk .bubble b{color:var(--orange)}
+.talk .bubble i{font-style:normal;color:var(--aqua-deep)}
+.cards{position:absolute;display:grid;gap:22px}
+.cardx{background:#fff;border:3px solid var(--line);border-radius:26px;padding:26px 28px;opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s}
+.cardx.on{opacity:1;transform:none}
+.cardx .k{font-size:20px;font-weight:800;color:var(--aqua-deep);margin-bottom:8px}
+.cardx h4{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.3}
+.cardx p{font-size:22px;color:var(--muted);margin-top:8px;line-height:1.5}
+.cardx.orange{border-color:var(--orange);background:var(--orange-pale)}
+.cardx.orange .k{color:var(--orange-deep)}
+.cardx.aqua{border-color:var(--aqua);background:var(--aqua-pale)}
+.bigline{position:absolute;font-size:52px;font-weight:800;letter-spacing:-.03em;line-height:1.25;color:var(--ink)}
+.bigline em{font-style:normal;color:var(--orange)}
+.mini{position:absolute;font-size:24px;color:var(--muted);line-height:1.5}
+.caption-bar{min-height:84px;display:flex;align-items:center;justify-content:center;padding:14px 22px;background:var(--ink);color:#fff;text-align:center;font-size:clamp(15px,2vw,20px);font-weight:600;line-height:1.5;letter-spacing:-.01em}
+.caption-bar span{display:block}
+.caption-bar em{font-style:normal;color:#FFC79A}
+.progress{height:5px;background:var(--paper);position:relative}
+.progress i{position:absolute;left:0;top:0;bottom:0;background:var(--aqua);width:0;transition:width .3s linear}
+.controls{display:flex;align-items:center;gap:8px;padding:12px 14px;flex-wrap:wrap;background:#fff;border-top:1px solid var(--line)}
+.controls .sp{flex:1}
+.controls .pg{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding:0 6px}
+.seg-list{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 14px;background:#fff}
+.seg-list button{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:7px 12px}
+.seg-list button b{color:var(--aqua-deep);margin-right:4px}
+.seg-list button[aria-current="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.seg-list button[aria-current="true"] b{color:#8FDCE9}
+
+/* side panel */
+.side{display:flex;flex-direction:column;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 22px}
+.card h3{font-size:14px;font-weight:800;color:var(--faint);letter-spacing:.04em;margin-bottom:10px}
+.card h4{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.35}
+.card ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:15px;line-height:1.6}
+.card li+li{margin-top:5px}
+.card li b{color:var(--ink)}
+.tip{background:var(--orange-pale);border-color:#F8D3B8}
+.tip p{font-size:15px;color:var(--orange-deep);line-height:1.6;margin-top:6px}
+.tip p b{color:var(--ink)}
+.keys{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 14px}
+
+/* ---------- sections ---------- */
+section.blk{padding:52px 0 8px}
+.sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.sec-h .no{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--aqua-deep);letter-spacing:.08em}
+.sec-h h2{font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.025em}
+.sec-h p{color:var(--faint);font-size:14px}
+.grid2{display:grid;gap:16px}
+@media(min-width:820px){.grid2{grid-template-columns:1fr 1fr}}
+.grid3{display:grid;gap:16px}
+@media(min-width:820px){.grid3{grid-template-columns:repeat(3,1fr)}}
+
+/* sim: 라이선스 O/X */
+.sim{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow)}
+.sim-q{font-size:clamp(18px,2.4vw,24px);font-weight:800;line-height:1.4;letter-spacing:-.02em;min-height:68px}
+.sim-q small{display:block;font-size:13px;font-weight:700;color:var(--aqua-deep);margin-bottom:8px}
+.sim-btns{display:flex;gap:10px;margin-top:16px}
+.sim-btns button{flex:1;height:64px;border:2px solid var(--line);border-radius:18px;background:#fff;font-size:22px;font-weight:900;transition:transform .12s,background .2s}
+.sim-btns button:hover{transform:translateY(-2px)}
+.sim-btns button.ok{background:var(--aqua-pale);border-color:var(--aqua);color:var(--aqua-deep)}
+.sim-btns button.no{background:#FDECEC;border-color:#E5484D;color:#B42318}
+.sim-btns button:disabled{cursor:default}
+.sim-ans{margin-top:14px;background:var(--paper);border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.6;color:var(--muted);min-height:74px}
+.sim-ans b{color:var(--ink)}
+.sim-ans.right{background:var(--aqua-pale);color:var(--aqua-deep)}
+.sim-ans.right b{color:var(--aqua-deep)}
+.sim-ans.wrong{background:#FDECEC;color:#B42318}
+.sim-ans.wrong b{color:#B42318}
+.sim-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap}
+.sim-dots{display:flex;gap:6px}
+.sim-dots i{width:22px;height:8px;border-radius:99px;background:var(--line)}
+.sim-dots i.r{background:var(--aqua)} .sim-dots i.w{background:#E5484D} .sim-dots i.c{background:var(--ink)}
+.sim-score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.lic{display:grid;gap:10px}
+.lic div{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;font-size:15px;line-height:1.55;color:var(--muted)}
+.lic div b{display:inline-flex;width:30px;height:30px;border-radius:9px;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+.lic .ok b{background:var(--aqua-pale);color:var(--aqua-deep)} .lic .no b{background:#FDECEC;color:#B42318}
+
+/* say */
+.say{display:grid;gap:14px}
+.say article{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 22px;display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:start}
+.say article img{width:56px;height:56px;object-fit:contain}
+.say article .to{font-size:12.5px;font-weight:800;color:var(--aqua-deep);margin-bottom:6px}
+.say article p{font-size:16.5px;line-height:1.6;font-weight:600}
+.say article p b{color:var(--orange)}
+
+/* checklist */
+.ck{display:grid;gap:8px}
+.ck label{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.5;cursor:pointer}
+.ck input{appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid var(--line);margin-top:1px;display:grid;place-items:center}
+.ck input:checked{background:var(--aqua);border-color:var(--aqua)}
+.ck input:checked::after{content:"";width:10px;height:6px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:translateY(-2px) rotate(-45deg)}
+.ck label small{display:block;color:var(--faint);font-size:13px}
+.ck-done{margin-top:12px;font-size:14px;font-weight:700;color:var(--aqua-deep);min-height:20px}
+
+.src ul{padding-left:18px;font-size:14px;color:var(--muted);line-height:1.6}
+.src li+li{margin-top:6px}
+footer{padding:44px 0 60px;color:var(--faint);font-size:13px;line-height:1.7}
+
+/* notes modal */
+.notes{position:fixed;inset:0;z-index:60;background:rgba(10,12,16,.6);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;padding:16px}
+@media(min-width:800px){.notes{align-items:center}}
+.notes-box{background:#fff;border-radius:22px;width:min(860px,100%);max-height:84vh;overflow:auto;padding:24px 26px}
+.notes-box h3{font-size:20px;font-weight:800;margin-bottom:4px}
+.notes-box .plan{font-family:var(--mono);font-size:12px;color:var(--aqua-deep);margin-bottom:14px}
+.notes-box p{font-size:16px;line-height:1.75;color:var(--ink);white-space:pre-line}
+.notes-box .acts{display:flex;justify-content:flex-end;margin-top:16px}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);z-index:80;background:var(--ink);color:#fff;font-size:14px;font-weight:700;padding:10px 16px;border-radius:12px;box-shadow:var(--shadow)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" href="../index.html#miricanvas/s6"><i>Q</i>쌤크리에이터 스튜디오 · 미리캔버스 6차시</a>
+    <nav><a href="#watch">보기</a><a href="#touch">만져 보기</a><a href="#say">이렇게 말해요</a><a href="#check">체크·과제</a><a href="#src">출처</a></nav>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow"><b>1차시 · 25분</b> 미리캔버스 시작하기</p>
+    <h1>캔바 말고 미리캔버스?<br>첫 시간엔 <em>학급 이름표 한 장</em>만 끝냅니다</h1>
+    <p class="sub">실제 미리캔버스 화면을 그대로 따라가요. 계정과 편집기 구조를 5분에 익히고, 12분 동안 템플릿을 찾아 이름을 바꾸고 다운로드까지. 마지막엔 교육용 라이선스를 O/X로 확인해요.</p>
+    <div class="chips"><span class="chip">세그먼트 <b>5개</b></span><span class="chip">장면 <b id="chipN">0</b></span><span class="chip">산출물 <b>이름표 1장(PNG·PDF)</b></span><span class="chip">준비물 <b>크롬 · 학교 이메일</b></span></div>
+  </header>
+
+  <div class="theater-grid" id="watch">
+    <div class="theater">
+      <div class="stage-wrap" id="stageWrap">
+        <div class="stage" id="stage"></div>
+      </div>
+      <div class="caption-bar" id="cap"></div>
+      <div class="progress"><i id="prog"></i></div>
+      <div class="controls">
+        <button class="btn primary" id="bPlay" type="button"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg><span>재생</span></button>
+        <button class="btn" id="bPrev" type="button" aria-label="이전 장면"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="pg" id="pg">1 / 1</span>
+        <button class="btn" id="bNext" type="button" aria-label="다음 장면"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        <span class="sp"></span>
+        <button class="btn" id="bVoice" type="button" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg><span>음성</span></button>
+        <button class="btn" id="bNotes" type="button"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>강사 대본</span></button>
+      </div>
+      <div class="seg-list" id="segList"></div>
+    </div>
+    <aside class="side">
+      <div class="card"><h3>이 장면에서</h3><h4 id="sideTitle"></h4><ul id="sideDo"></ul></div>
+      <div class="card tip"><h3>왜 이렇게 해요</h3><p id="sideWhy"></p></div>
+      <div class="card"><h3>단축키</h3><div class="keys"><span><kbd>Space</kbd> 재생·멈춤</span><span><kbd>←</kbd><kbd>→</kbd> 장면</span><span><kbd>V</kbd> 음성</span><span><kbd>N</kbd> 대본</span><span><kbd>1</kbd>~<kbd>5</kbd> 세그먼트</span></div></div>
+    </aside>
+  </div>
+
+  <section class="blk" id="touch">
+    <div class="sec-h"><span class="no">만져 보기</span><h2>이 디자인, 이렇게 써도 될까요?</h2><p>교육용 라이선스(2026. 3. 27 시행) 기준 O/X · 8문항</p></div>
+    <div class="grid2">
+      <div class="sim" id="sim">
+        <div class="sim-q" id="simQ"></div>
+        <div class="sim-btns"><button type="button" class="btn-o" id="simO">O 돼요</button><button type="button" class="btn-x" id="simX">X 안 돼요</button></div>
+        <div class="sim-ans" id="simA">교육용 라이선스가 적용되는 Edu+ 또는 교육청 사업 Pro 계정 기준이에요. 직감으로 눌러 보세요.</div>
+        <div class="sim-foot"><div class="sim-dots" id="simDots"></div><span class="sim-score" id="simScore">0 / 8</span><button type="button" class="btn small" id="simReset">처음부터</button></div>
+      </div>
+      <div class="card">
+        <h3>한 장으로 정리</h3>
+        <div class="lic">
+          <div class="ok"><b>O</b><span>교실·온라인 수업 발표 자료와 영상 자료</span></div>
+          <div class="ok"><b>O</b><span>인쇄해서 우리 학교 학생·학부모에게 배포</span></div>
+          <div class="ok"><b>O</b><span>jpg·png·pdf로 학교 홈페이지·SNS·유튜브에 학교 홍보 게시</span></div>
+          <div class="ok"><b>O</b><span>학교 홍보용 현수막·리플렛, 단체티·에코백 같은 비판매 굿즈</span></div>
+          <div class="no"><b>X</b><span>pptx처럼 편집 가능한 파일로 타인과 공유·배포</span></div>
+          <div class="no"><b>X</b><span>모금 굿즈를 포함한 어떤 영리 활동에도 사용</span></div>
+          <div class="no"><b>X</b><span>교외 활동·개인 활동에 사용</span></div>
+          <div class="no"><b>X</b><span>디자인에 대한 권리(저작권·상표권) 주장, 타인의 재편집 허용</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="say">
+    <div class="sec-h"><span class="no">이렇게 말해요</span><h2>학생에게, 동료에게 그대로 할 말</h2></div>
+    <div class="say">
+      <article><img src="char/point.webp" alt=""><div><div class="to">학생에게</div><p>"이 이름표는 선생님이 미리캔버스에서 만든 거예요. 여러분도 <b>템플릿 찾기 → 글자 바꾸기 → 다운로드</b>, 세 단계면 만들 수 있어요."</p></div></article>
+      <article><img src="char/idea.webp" alt=""><div><div class="to">학생에게</div><p>"글꼴을 고를 때 <b>'저작권 안심글꼴'</b>부터 열어 보세요. 학교에서 마음 놓고 쓰라고 모아 둔 글꼴이에요."</p></div></article>
+      <article><img src="char/glass.webp" alt=""><div><div class="to">동료 교사에게</div><p>"학생 계정은 미리캔버스가 따로 발급하지 않아요. <b>웨일 스페이스 통합 계정</b>으로 간편 로그인하면 돼요. 학교 단위 요금제는 워크스페이스에 멤버를 초대하는 방식이고요."</p></div></article>
+      <article><img src="char/oops.webp" alt=""><div><div class="to">동료 교사에게</div><p>"만든 이름표를 <b>pptx로 돌리지는 마세요.</b> 편집 가능한 파일 공유는 라이선스 위반이에요. png·pdf로 주거나, 공유 링크로 복제해 가게 하면 돼요."</p></div></article>
+    </div>
+  </section>
+
+  <section class="blk" id="check">
+    <div class="sec-h"><span class="no">체크 · 과제</span><h2>1차시를 마치면</h2></div>
+    <div class="grid2">
+      <div>
+        <div class="ck" id="ck">
+          <label><input type="checkbox"><span>미리캔버스에 <b>내 계정</b>으로 로그인했다<small>네이버·구글·이메일·웨일 스페이스 중 하나</small></span></label>
+          <label><input type="checkbox"><span>편집기 왼쪽 탭 <b>템플릿·요소·텍스트·사진·업로드·AI 도구</b>가 어디 있는지 안다</span></label>
+          <label><input type="checkbox"><span>템플릿 검색으로 <b>이름표</b>를 찾아 '이 템플릿으로 덮어쓰기'를 눌러 봤다</span></label>
+          <label><input type="checkbox"><span>글자를 눌러 <b>내 이름</b>으로 바꾸고, 저작권 안심글꼴을 열어 봤다</span></label>
+          <label><input type="checkbox"><span><b>PNG 또는 PDF</b>로 다운로드했다<small>인쇄용은 PDF, 화면용은 PNG</small></span></label>
+          <label><input type="checkbox"><span>교육용 라이선스 O/X 8문항 중 <b>6개 이상</b> 맞혔다</span></label>
+        </div>
+        <div class="ck-done" id="ckDone"></div>
+      </div>
+      <div class="side">
+        <div class="card"><h3>과제 · 다음 차시 전까지</h3><h4>우리 반 이름표 세트 만들기</h4><ul><li>같은 템플릿으로 <b>학생 수만큼 페이지 추가</b>(페이지 복제 버튼)</li><li>이름만 바꾸고 <b>PDF 한 파일</b>로 다운로드</li><li>A4에 인쇄해 잘라서 책상에 붙이기</li></ul></div>
+        <div class="card"><h3>다음 차시 예고</h3><h4>2차시 · 수업 PPT 25분 완성</h4><ul><li>프레젠테이션 템플릿으로 <b>다음 주 수업 도입 PPT 8장</b></li><li>준비물: 다음 주 수업 차시 1개, 교과서 이미지 2~3장</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk src" id="src">
+    <div class="sec-h"><span class="no">출처</span><h2>이 연수가 근거로 삼은 페이지</h2><p>2026. 9. 25 확인</p></div>
+    <div class="card"><ul>
+      <li><a href="https://help.miricanvas.com/hc/ko/articles/22468655556633" target="_blank" rel="noopener">미리캔버스 교육용 라이선스 계약(시행 2026. 3. 27)</a> — 허용 7항·금지 7항의 원문. O/X 문항은 여기서 가져왔어요.</li>
+      <li><a href="https://www.miricanvas.com/s/119" target="_blank" rel="noopener">미리캔버스 라이선스 계약(2023. 9. 11)</a> — 무료 계정의 일반 라이선스. 학교 프로젝트·강의 자료·과제 제출용은 허용, 로고·상표 등록과 요소 잘라 쓰기는 금지.</li>
+      <li><a href="https://help.miricanvas.com/hc/ko/articles/900003778186" target="_blank" rel="noopener">학교/학생용 아이디 단체 발급 신청하기</a> — 2021. 9. 28부터 자체 학생 계정 발급 중단, 웨일 스페이스 통합 계정으로 간편 로그인.</li>
+      <li><a href="https://help.miricanvas.com/hc/ko/articles/31701932659097" target="_blank" rel="noopener">Pro 요금제와 Edu+ 요금제의 차이</a> — 1인 1계정, 요금제는 워크스페이스 단위, Edu+ 1구간(1~100명) 월 55만 원.</li>
+      <li><a href="https://www.miricanvas.com/ko/pricing" target="_blank" rel="noopener">요금제</a> — 무료 ₩0(5만 개 이상 템플릿·35만 개 이상 사진·1GB), Pro 연 160,800원(월 13,400원), 교육용은 에듀팀 문의.</li>
+      <li>화면 캡처는 2026. 9. 25 미리캔버스 웹 편집기(로그인 전 상태)에서 직접 떴어요. 화면 구성은 업데이트로 달라질 수 있어요.</li>
+    </ul></div>
+  </section>
+
+  <footer>비바샘 샘크리에이티브 연수 기획 · 미리캔버스 6차시 중 1차시 시제품 · 경기 AI융합교육연구회 Q.U.O.K.A · 두목쿼카 · 캐릭터는 연구회 스티커, 화면은 미리캔버스 실제 캡처</footer>
+</div>
+
+<div class="notes" id="notes" hidden>
+  <div class="notes-box" role="dialog" aria-label="강사 대본">
+    <h3 id="nTitle"></h3><div class="plan" id="nPlan"></div><p id="nBody"></p>
+    <div class="acts"><button type="button" class="btn" id="nClose">닫기 <kbd>Esc</kbd></button></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ============ 데이터: 세그먼트 · 장면 ============ */
+const SEGS = [
+  { id: 'open', name: '오프닝', min: 2, script: `안녕하세요, 쿼카연구회 두목쿼카입니다. 캔바 연수 들어 보신 분 많으시죠? 그런데 막상 한글로 학급 자료를 만들려니 폰트가 어색하고, 가정통신문 양식은 없고, 상장 규격은 안 맞고. 오늘부터 6차시, 그 빈틈을 미리캔버스로 채워 보겠습니다.\n\n첫 시간엔 딱 세 가지만 해요. 계정과 편집기 구조를 익히고, 이름표 한 장을 만들고, 저작권을 O/X로 확인합니다. 끝나면 선생님 이름이 들어간 이름표 PNG 파일이 손에 남아요.` },
+  { id: 'concept', name: '개념', min: 5, script: `미리캔버스는 계정이 세 종류라고 생각하면 편해요. 첫째, 개인 무료 계정. 네이버·구글·이메일로 가입하면 평생 무료로 5만 개 넘는 템플릿과 35만 개 넘는 사진을 쓸 수 있어요. 둘째, 학생 계정. 미리캔버스가 따로 발급하지 않고 웨일 스페이스 통합 계정으로 간편 로그인해요. 셋째, 학교 단위 유료 요금제. Pro는 1인당 연 160,800원이고, Edu+는 학교 워크스페이스에 100명 단위로 계약해요. 요금제는 계정이 아니라 워크스페이스 단위라는 게 포인트예요.\n\n편집기는 왼쪽 세로 탭이 전부예요. 템플릿, 요소, 텍스트, 사진, 업로드, AI 도구, 배경. 오른쪽 위엔 크기, 저장, 공유, 다운로드. 왕관 표시가 붙은 건 유료 콘텐츠예요. 무료 계정이면 왕관 없는 것만 고르면 됩니다.` },
+  { id: 'do', name: '따라하기', min: 12, script: `이제 같이 만들어요. 미리캔버스 디자인 페이지를 열면 '무엇을 만들어야 하나요?' 창이 떠요. 이 창은 닫고, 왼쪽 템플릿 탭 검색창에 '이름표'라고 칩니다. 결과에서 마음에 드는 걸 누르면 미리보기가 열리고, '이 템플릿으로 덮어쓰기'를 누르면 캔버스에 들어와요.\n\n이름 부분을 한 번 클릭하면 파란 테두리가 생기고 왼쪽에 텍스트 속성이 열려요. 두 번 클릭하면 글자를 고칠 수 있어요. 전체 선택하고 내 이름을 쳐요. 글꼴 상자를 눌러 바꿀 수도 있는데, 텍스트 탭에 '저작권 안심글꼴'이 따로 있어요. KERIS 학교안심체 같은 것들이에요.\n\n다운로드를 누르면 파일 형식을 고를 수 있어요. 화면용은 PNG, 인쇄용은 PDF. 여기서 로그인을 요구하니 미리 가입해 두세요.` },
+  { id: 'apply', name: '수업 적용', min: 4, script: `만든 자료를 어디까지 써도 되는지, 교육용 라이선스 기준으로 정리해요. 교실 수업 발표, 학생·학부모 인쇄 배포, png·pdf로 학교 홈페이지와 SNS에 학교 홍보 게시, 단체티 같은 비판매 굿즈까지는 됩니다. 반대로 pptx처럼 편집 가능한 파일을 남에게 주는 것, 모금 굿즈를 포함한 영리 활동, 교외·개인 활동, 그리고 내가 저작권을 주장하는 것은 안 돼요. 오른쪽 O/X 여덟 문항으로 확인해 보세요.` },
+  { id: 'wrap', name: '정리·과제', min: 2, script: `오늘 한 것: 계정, 편집기 구조, 이름표 한 장, 라이선스. 과제는 우리 반 이름표 세트예요. 같은 템플릿에서 페이지를 학생 수만큼 복제하고 이름만 바꿔서 PDF 한 파일로 받으면 돼요. 다음 시간엔 다음 주에 실제로 쓸 수업 PPT를 25분 안에 만듭니다. 수업 차시 하나 정해서 오세요.` }
+];
+
+/* 장면: seg, dur(초), type(shot|talk), img, hl:[x,y,w,h], tag, zoom, cap, side:{t,do[],why} */
+const STEPS = [
+  // ---------- 오프닝 ----------
+  { seg: 'open', dur: 12, type: 'talk', pose: 'base', bubble: '캔바 연수는 들어 보셨죠?<br>그런데 <b>한글 학급 자료</b>는 어딘가 어색하지 않던가요?',
+    cap: '캔바 연수는 이미 있어요. 그런데 한글 폰트, 가정통신문 양식, 상장 규격에서 늘 한 번씩 막히죠.',
+    side: { t: '오프닝 · 왜 미리캔버스인가', do: ['오늘의 결과물: 내 이름이 들어간 이름표 1장', '25분 = 오프닝 2 · 개념 5 · 따라하기 12 · 적용 4 · 정리 2'], why: '연수 첫 장면은 도구 소개가 아니라 <b>선생님이 겪은 불편</b>에서 시작해야 따라올 이유가 생겨요.' } },
+  { seg: 'open', dur: 16, type: 'cards', pose: 'point', title: '캔바 말고 미리캔버스, 다른 점 세 가지',
+    cards: [['1', '한글 폰트 · 저작권 안심글꼴', '텍스트 탭에 KERIS 학교안심체 같은 글꼴 묶음이 따로 있어요.'], ['2', '한국 교실 서식', '이름표·명함·상장·안내문이 인쇄 규격째로 템플릿에 있어요.'], ['3', '학생 계정 = 웨일 스페이스', '학생은 웨일 스페이스 통합 계정으로 간편 로그인해요.']],
+    cap: '다른 점은 세 가지예요. <em>저작권 안심글꼴</em>, 한국 교실 서식, 그리고 웨일 스페이스로 들어오는 학생 계정.',
+    side: { t: '다른 점 세 가지', do: ['이 세 가지를 6차시 내내 반복해서 확인해요', '오늘은 1번과 2번을 손으로 만져 봐요'], why: '차별점을 먼저 말해 두면 "캔바로 하면 되지 않나"라는 질문이 사라져요.' } },
+  { seg: 'open', dur: 8, type: 'talk', pose: 'idea', bubble: '오늘 목표는 딱 하나.<br><i>학급 이름표 한 장</i>을 내 이름으로 만들어 다운로드까지!',
+    cap: '오늘 목표는 딱 하나. 학급 이름표 한 장을 내 이름으로 만들어 다운로드까지 해요.',
+    side: { t: '오늘의 목표', do: ['크롬 브라우저와 학교 이메일만 있으면 돼요', '로그인은 따라하기 마지막에 필요해요'], why: '첫 차시는 <b>작게 끝까지</b>. 결과물이 하나 남아야 다음 차시로 이어져요.' } },
+
+  // ---------- 개념 ----------
+  { seg: 'concept', dur: 14, type: 'shot', img: 'pricing', hl: [120, 380, 290, 520], tag: '무료 · ₩0 · 평생', zoom: 1.15,
+    cap: '계정은 세 종류로 나눠 생각해요. 먼저 <em>개인 무료 계정</em>. 5만 개 넘는 템플릿과 35만 개 넘는 사진, 1GB 저장 공간이 평생 무료예요.',
+    side: { t: '계정 ① 개인 무료', do: ['요금제 페이지에서 "무료로 시작하기"', '왕관 표시 없는 콘텐츠만 쓰면 비용 0원'], why: '연수 수강자 대부분은 무료 계정으로 6차시를 다 따라올 수 있어요.' } },
+  { seg: 'concept', dur: 12, type: 'shot', img: 'pricing', hl: [424, 380, 290, 520], tag: 'Pro · 연 160,800원', zoom: 1.15,
+    cap: 'Pro는 1인당 연 160,800원. 프리미엄 템플릿과 사진, AI 도구, 배경 제거가 무제한이에요. 학교 단위는 오른쪽 <em>교육용 에듀팀 문의</em>로 가요.',
+    side: { t: '계정 ② 유료 · Pro와 Edu+', do: ['Pro: 1인당 월 13,400원(연 결제 기준)', 'Edu+: 학교 워크스페이스 단위, 1구간 100명 월 55만 원', '40명 이상이면 Edu+가 유리하다고 안내'], why: '요금제는 계정이 아니라 <b>워크스페이스</b> 단위예요. 멤버를 초대하는 방식이라 학교 관리자가 한 번에 세팅해요.' } },
+  { seg: 'concept', dur: 12, type: 'shot', img: 's15-login', hl: [520, 225, 400, 450], tag: '로그인 · 7가지 방법', zoom: 1.2,
+    cap: '로그인은 네이버, 구글, 이메일, 카카오, 페이스북, <em>웨일 스페이스</em>, 애플. 학생은 웨일 스페이스 통합 계정으로 간편 로그인해요.',
+    side: { t: '계정 ③ 학생 계정', do: ['학생용 계정은 미리캔버스가 따로 발급하지 않아요(2021. 9. 28부터)', '학교에서 웨일 스페이스 통합 계정을 무료 발급', '로그인 창 하단 웨일 아이콘 → 웨일 ID로 동의'], why: '학생 이메일이 없어 막히는 학교가 많아요. 웨일 스페이스가 그 답이에요.' } },
+  { seg: 'concept', dur: 16, type: 'shot', img: 's02-editor-empty', hl: [0, 68, 74, 780], tag: '왼쪽 세로 탭', zoom: 1,
+    cap: '편집기 구조는 왼쪽 세로 탭이 전부예요. <em>템플릿 · 요소 · 텍스트 · 사진 · 업로드 · AI 도구 · 배경</em>. 아래로 테마, 차트, 동영상, 오디오, QR까지.',
+    side: { t: '편집기 구조 ① 왼쪽 탭', do: ['템플릿: 통째로 가져오기', '요소·사진·텍스트: 하나씩 추가', '업로드: 내 사진·로고', 'AI 도구: 배경 제거·AI 이미지(6차시)'], why: '탭 이름만 외우면 이후 5차시의 모든 설명이 "어느 탭에서"로 통해요.' } },
+  { seg: 'concept', dur: 12, type: 'shot', img: 's02-editor-empty', hl: [540, 12, 840, 42], tag: '크기 · 로그인 · 저장 · 공유 · 다운로드', zoom: 1.1,
+    cap: '오른쪽 위는 <em>크기, 저장, 공유, 인쇄물 제작, 다운로드</em>. 가운데 위 "1080×1080 px"를 누르면 크기를 바꿀 수 있어요.',
+    side: { t: '편집기 구조 ② 상단 바', do: ['크기 변경은 상단 가운데 픽셀 표시', '다운로드·공유는 로그인 후 가능'], why: '크기부터 정하는 습관이 인쇄 사고를 막아요. 3차시 인쇄 규격에서 다시 나와요.' } },
+  { seg: 'concept', dur: 10, type: 'shot', img: 's05-template-applied', hl: [88, 618, 312, 178], tag: '왕관 = 유료 콘텐츠', zoom: 1.4, below: true,
+    cap: '썸네일 오른쪽 아래 <em>왕관</em>이 붙은 건 프리미엄, 즉 유료예요. 무료 계정이면 왕관 없는 템플릿을 고르면 돼요.',
+    side: { t: '왕관 표시 읽기', do: ['왕관 없는 것 = 무료 계정으로 다운로드 가능', '왕관 있는 것 = Pro·Edu+에서 무제한'], why: '수강자가 다운로드 단계에서 결제창을 만나는 게 가장 흔한 좌절이에요. 미리 알려 줘요.' } },
+
+  // ---------- 따라하기 ----------
+  { seg: 'do', dur: 12, type: 'shot', img: 's01-design-modal', hl: [180, 100, 1080, 700], tag: '"무엇을 만들어야 하나요?" 창은 닫아요', zoom: 1,
+    cap: '따라하기 시작. 미리캔버스 <em>디자인 페이지</em>를 열면 이 창이 떠요. 오른쪽 위 X로 닫아요. 우리는 템플릿 검색으로 갈 거예요.',
+    side: { t: '1단계 · 편집기 열기', do: ['주소: miricanvas.com/design', '창은 닫기(X 또는 Esc)', '로그인 전이라도 편집기는 열려요'], why: '이 창은 문서 종류를 고르는 곳이라 "이름표"를 쳐도 결과가 없어요. 템플릿 탭으로 가야 나와요.' } },
+  { seg: 'do', dur: 12, type: 'shot', img: 's03-template-search', hl: [88, 76, 312, 40], tag: '템플릿 검색: 이름표', zoom: 1.5,
+    cap: '왼쪽 템플릿 탭 검색창에 <em>"이름표"</em>라고 치고 엔터. 아래 추천 키워드로 학급이름표, 학교이름표를 눌러도 돼요.',
+    side: { t: '2단계 · 템플릿 검색', do: ['검색어: 이름표 / 학급이름표 / 명찰', '왕관 없는 것부터 고르기'], why: '검색어 한 단어가 결과를 결정해요. 학생에게도 "무엇을 만들지 한 단어로"가 첫 질문이에요.' } },
+  { seg: 'do', dur: 12, type: 'shot', img: 's04-template-clicked', hl: [88, 128, 312, 40], tag: '이 템플릿으로 덮어쓰기', zoom: 1.5,
+    cap: '마음에 드는 걸 누르면 미리보기가 열려요. <em>"이 템플릿으로 덮어쓰기"</em>를 누르면 캔버스에 통째로 들어와요.',
+    side: { t: '3단계 · 템플릿 적용', do: ['페이지가 2장짜리면 2장 다 들어와요', '뒤로 가기는 상단 되돌리기 화살표'], why: '"덮어쓰기"라는 말에 놀라는 분이 많아요. 빈 캔버스를 덮는 거라 잃을 게 없다고 말해 주세요.' } },
+  { seg: 'do', dur: 12, type: 'shot', img: 's05-template-applied', hl: [496, 130, 866, 500], tag: '캔버스에 들어온 이름표', zoom: 1,
+    cap: '이름표가 캔버스에 들어왔어요. 상단 크기가 자동으로 <em>355×204 px</em>, 명함 규격으로 바뀐 것도 보이죠.',
+    side: { t: '3단계 · 결과 확인', do: ['크기 표시가 템플릿 규격으로 바뀜', '아래 2페이지는 뒷면 같은 세트'], why: '템플릿은 크기까지 데려와요. 그래서 인쇄용은 처음부터 인쇄 템플릿에서 시작하는 게 안전해요.' } },
+  { seg: 'do', dur: 12, type: 'shot', img: 's06-text-selected', hl: [712, 420, 434, 150], tag: '한 번 클릭 = 선택', zoom: 1.2,
+    cap: '이름을 <em>한 번</em> 클릭하면 파란 테두리로 선택돼요. 왼쪽에 텍스트 속성 패널이 열려요. 글꼴은 "여기어때 잘난체", 크기 32.',
+    side: { t: '4단계 · 글자 선택', do: ['한 번 클릭: 선택(이동·크기)', '두 번 클릭: 글자 편집', '왼쪽 패널: 글꼴·크기·굵기·색'], why: '클릭 한 번과 두 번의 차이를 여기서 확실히 해 두면 뒤 차시가 편해요.' } },
+  { seg: 'do', dur: 12, type: 'shot', img: 's06-text-selected', hl: [88, 252, 312, 96], tag: '글꼴 · 크기', zoom: 1.5,
+    cap: '왼쪽 패널 위쪽이 <em>글꼴</em>, 그 아래가 크기·굵기·기울임·밑줄. 글꼴 상자를 누르면 목록이 열려요.',
+    side: { t: '4단계 · 글꼴 바꾸기', do: ['글꼴 상자 클릭 → 목록에서 선택', '크기는 −/+ 또는 숫자 입력'], why: '한글 글꼴 목록이 길어요. 다음 장면의 "저작권 안심글꼴"부터 열게 하세요.' } },
+  { seg: 'do', dur: 12, type: 'shot', img: 's07-text-edited', hl: [712, 420, 434, 150], tag: '두 번 클릭 → 내 이름', zoom: 1.2,
+    cap: '두 번 클릭해서 글자를 지우고 <em>내 이름</em>을 쳐요. "김비즈"가 "김햇살"로 바뀌었죠. 반 이름도 같은 방법이에요.',
+    side: { t: '5단계 · 이름 바꾸기', do: ['두 번 클릭 → Ctrl+A → 이름 입력', '반 이름 줄도 같은 방법', '빈 곳 클릭하면 편집 종료'], why: '학생 이름표 30장을 만드는 과제가 바로 이 동작의 반복이에요.' } },
+  { seg: 'do', dur: 14, type: 'shot', img: 's10-panel-text', hl: [88, 396, 312, 150], tag: '저작권 안심글꼴', zoom: 1.5,
+    cap: '왼쪽 <em>텍스트 탭</em>을 열면 "저작권 안심글꼴"이 따로 있어요. KERIS 학교안심 상장체처럼 학교에서 마음 놓고 쓰라고 모아 둔 글꼴이에요.',
+    side: { t: '6단계 · 안심글꼴', do: ['텍스트 탭 → 저작권 안심글꼴 → 더보기', '제목·부제목·본문 텍스트 추가도 여기'], why: '캔바와 가장 다른 지점이에요. 학교 문서의 글꼴 저작권 걱정을 도구가 대신 해 줘요.' } },
+  { seg: 'do', dur: 14, type: 'shot', img: 's13-download', hl: [1060, 62, 320, 424], tag: '다운로드 · PNG / PDF', zoom: 1.2,
+    cap: '오른쪽 위 <em>다운로드</em>. 파일 형식에서 화면용은 PNG, 인쇄용은 PDF를 골라요. 여기서 <em>로그인</em>을 요구해요.',
+    side: { t: '7단계 · 다운로드', do: ['PNG: 화면·SNS용, 투명 배경 가능', 'PDF: 인쇄용', '고해상도 다운로드 선택'], why: '다운로드에서 로그인이 걸리니, 연수에서는 여기 오기 전에 가입을 끝내 두게 안내해요.' } },
+  { seg: 'do', dur: 10, type: 'shot', img: 's14-share', hl: [520, 225, 400, 450], tag: '가입은 30초', zoom: 1.2,
+    cap: '가입은 네이버·구글·이메일 중 하나로 30초. 가입하면 다운로드와 <em>공유 링크</em>가 열려요.',
+    side: { t: '7단계 · 가입 후 다운로드', do: ['학교 이메일 또는 개인 계정', '가입 후 다운로드 다시 누르기', '이름표.png 파일 확인'], why: '오늘의 산출물이 파일로 남는 순간이에요. 파일명을 "우리반_이름표"처럼 바꾸게 하세요.' } },
+
+  // ---------- 수업 적용 ----------
+  { seg: 'apply', dur: 12, type: 'cards', pose: 'glass', title: '이 이름표, 어디까지 써도 될까?',
+    cards: [['O', '교실 수업 · 인쇄 배포', '발표 자료, 학생·학부모에게 인쇄해 나눠 주기'], ['O', '학교 홍보 게시', 'jpg·png·pdf로 학교 홈페이지·SNS·유튜브'], ['X', '편집 파일 공유', 'pptx처럼 편집 가능한 파일을 남에게 주기'], ['X', '영리 · 교외 · 개인', '모금 굿즈, 교외 활동, 개인 활동']],
+    cap: '교육용 라이선스는 <em>교실과 학교 홍보</em>까지 허용하고, <em>편집 파일 공유와 영리·교외·개인 활동</em>은 막아요. 아래 O/X로 확인해요.',
+    side: { t: '수업 적용 · 라이선스', do: ['아래 "만져 보기" O/X 8문항', '무료 계정은 일반 라이선스: 학교 프로젝트·과제용 허용'], why: '라이선스는 외우는 게 아니라 <b>상황을 판단</b>하는 거예요. 그래서 O/X로 만들었어요.' } },
+  { seg: 'apply', dur: 10, type: 'talk', pose: 'oops', bubble: '만든 이름표를 <b>pptx로 돌리는 것</b>만은 하지 마세요.<br>png·pdf로 주거나, <i>공유 링크</i>로 복제해 가게 해요.',
+    cap: '가장 흔한 실수 하나. 편집 가능한 파일 공유는 위반이에요. png·pdf로 주거나 공유 링크로 복제해 가게 하면 돼요.',
+    side: { t: '가장 흔한 실수', do: ['pptx 공유 X', '공유 링크 → 상대 워크스페이스로 복제 O', '공유 드라이브(멤버 간) O'], why: '동학년 선생님들끼리 파일을 주고받는 문화가 있어서, 이 한 가지는 꼭 짚어야 해요.' } },
+
+  // ---------- 정리 ----------
+  { seg: 'wrap', dur: 12, type: 'cards', pose: 'idea', title: '오늘 한 것 · 다음에 할 것',
+    cards: [['오늘', '계정 · 편집기 · 이름표 1장 · 라이선스', '아래 체크리스트 6개로 확인'], ['과제', '우리 반 이름표 세트', '페이지 복제 → 이름만 바꾸기 → PDF 한 파일'], ['다음', '2차시 · 수업 PPT 25분 완성', '다음 주 수업 차시 하나 정해 오기']],
+    cap: '오늘은 계정, 편집기 구조, 이름표 한 장, 라이선스까지. 과제는 <em>우리 반 이름표 세트</em>, 다음 시간은 수업 PPT 25분 완성이에요.',
+    side: { t: '정리 · 과제', do: ['체크리스트 6개 확인', '과제: 페이지 복제로 학생 수만큼', '2차시 준비물: 수업 차시 1개'], why: '차시 끝에 "다음 시간 준비물"을 말해 두면 수강 지속률이 올라가요.' } }
+];
+
+/* ============ 만져 보기: 라이선스 O/X ============ */
+const QUIZ = [
+  ['우리 반 수업 시간에 이 이름표를 화면에 띄우고, 인쇄해서 책상에 붙였다.', true, '교실 수업의 발표·영상·인쇄물 사용은 허용이에요(교육용 라이선스 2조).'],
+  ['학부모 상담 주간 안내문을 미리캔버스로 만들어 인쇄해 학부모에게 나눠 줬다.', true, '소속 학교 학생·학부모에게 인쇄 배포하는 건 허용이에요.'],
+  ['학교 축제 포스터를 png로 내려받아 학교 인스타그램에 올렸다.', true, '학교 홍보 목적으로 jpg·png·pdf를 홈페이지·SNS·유튜브에 게시하는 건 허용이에요.'],
+  ['옆 반 선생님이 달라고 해서 이름표 디자인을 pptx로 내려받아 카톡으로 보냈다.', false, '편집 가능한 파일(pptx)로 타인과 공유·배포하는 건 금지예요. 공유 링크로 복제해 가게 하세요.'],
+  ['학급 바자회 수익금을 모으려고 이 디자인으로 스티커를 만들어 팔았다.', false, '모금처럼 공익 의도가 있어도 영리 활동으로 간주해 금지예요.'],
+  ['학교 체육대회 단체티에 미리캔버스로 만든 디자인을 넣었다(판매 안 함).', true, '학교 홍보용 비판매 굿즈(단체티·에코백)는 허용이에요.'],
+  ['개인 유튜브 채널 썸네일에 Edu+ 계정으로 만든 디자인을 썼다.', false, '교육용 라이선스는 교외·개인 활동 사용을 금지해요. 개인 활동은 개인 무료·Pro 계정으로.'],
+  ['내가 만든 이름표 디자인이니 "저작권 ⓒ 김햇살"이라고 표기해 배포했다.', false, '사용자는 사용 권한만 받아요. 디자인에 대한 저작권·상표권을 주장할 수 없어요.']
+];
+
+/* ============ 엔진 ============ */
+const $ = (s, r) => (r || document).querySelector(s);
+const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+const stage = $('#stage'), wrap = $('#stageWrap'), cap = $('#cap'), prog = $('#prog');
+const N = STEPS.length; $('#chipN').textContent = N;
+let cur = -1, playing = false, t0 = 0, raf = null, elapsed = 0;
+
+function layout() { const sc = wrap.clientWidth / 1440; stage.style.transform = `scale(${sc})`; }
+window.addEventListener('resize', layout); layout();
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function render(i) {
+  const s = STEPS[i];
+  stage.innerHTML = '';
+  const no = document.createElement('div'); no.className = 'step-no'; no.innerHTML = `<b>${esc(SEGS.find(x => x.id === s.seg).name)}</b> ${i + 1} / ${N}`;
+  if (s.type === 'shot') {
+    const sh = document.createElement('div'); sh.className = 'shot';
+    sh.innerHTML = `<img src="img/${s.img}.webp" alt="">`;
+    const [x, y, w, h] = s.hl;
+    const hl = document.createElement('div'); hl.className = 'hl' + (s.below ? ' below' : '');
+    hl.style.cssText = `left:${x}px;top:${y}px;width:${w}px;height:${h}px`;
+    hl.innerHTML = `<span class="tag">${esc(s.tag)}</span>`;
+    sh.appendChild(hl);
+    stage.append(sh, no);
+    requestAnimationFrame(() => { hl.classList.add('on'); });
+    const z = s.zoom || 1;
+    if (z > 1) {
+      const cx = x + w / 2, cy = y + h / 2;
+      let tx = 720 - cx * z, ty = 450 - cy * z;
+      tx = Math.min(0, Math.max(1440 - 1440 * z, tx)); ty = Math.min(0, Math.max(900 - 900 * z, ty));
+      setTimeout(() => { sh.style.transform = `translate(${tx}px,${ty}px) scale(${z})`; }, 60);
+    }
+  } else if (s.type === 'talk') {
+    const t = document.createElement('div'); t.className = 'talk';
+    t.innerHTML = `<div class="q"><img src="char/${s.pose || 'base'}.webp" alt=""></div><div class="bubble" style="left:470px;top:200px;width:840px">${s.bubble}</div>`;
+    stage.append(t, no);
+  } else if (s.type === 'cards') {
+    const t = document.createElement('div'); t.className = 'talk';
+    const n = s.cards.length;
+    const cols = n === 4 ? 2 : n; const w = n === 4 ? 420 : Math.floor(880 / n);
+    t.innerHTML = `<div class="q" style="width:300px;left:40px"><img src="char/${s.pose || 'point'}.webp" alt=""></div><div class="bigline" style="left:420px;top:90px;width:960px">${esc(s.title)}</div><div class="cards" style="left:420px;top:210px;width:960px;grid-template-columns:repeat(${cols},1fr)">${s.cards.map(c => `<div class="cardx ${c[0] === 'O' ? 'aqua' : c[0] === 'X' ? 'orange' : ''}"><div class="k">${esc(c[0])}</div><h4>${esc(c[1])}</h4><p>${esc(c[2])}</p></div>`).join('')}</div>`;
+    stage.append(t, no);
+    $$('.cardx', t).forEach((c, k) => setTimeout(() => c.classList.add('on'), 300 + k * 700));
+  }
+  cap.innerHTML = '<span>' + s.cap + '</span>';
+  $('#pg').textContent = `${i + 1} / ${N}`;
+  $('#sideTitle').textContent = s.side.t;
+  $('#sideDo').innerHTML = s.side.do.map(d => `<li>${d}</li>`).join('');
+  $('#sideWhy').innerHTML = s.side.why;
+  $$('#segList button').forEach(b => b.setAttribute('aria-current', String(b.dataset.seg === s.seg)));
+  if (voiceOn) speak(cap.textContent);
+  try { history.replaceState(null, '', '#s' + (i + 1)); } catch (e) {}
+}
+function go(i) { i = Math.max(0, Math.min(N - 1, i)); cur = i; elapsed = 0; render(i); prog.style.width = '0%'; if (playing) { t0 = performance.now(); } }
+function tick(now) {
+  if (!playing) return;
+  const s = STEPS[cur]; elapsed = (now - t0) / 1000;
+  prog.style.width = Math.min(100, elapsed / s.dur * 100) + '%';
+  if (elapsed >= s.dur) { if (cur < N - 1) { go(cur + 1); } else { stop(); prog.style.width = '100%'; return; } }
+  raf = requestAnimationFrame(tick);
+}
+function play() { if (playing) return; playing = true; t0 = performance.now() - elapsed * 1000; $('#bPlay span').textContent = '멈춤'; raf = requestAnimationFrame(tick); }
+function stop() { playing = false; cancelAnimationFrame(raf); $('#bPlay span').textContent = '재생'; }
+$('#bPlay').addEventListener('click', () => playing ? stop() : play());
+$('#bNext').addEventListener('click', () => go(cur + 1));
+$('#bPrev').addEventListener('click', () => go(cur - 1));
+
+// 세그먼트 칩
+$('#segList').innerHTML = SEGS.map((s, k) => `<button type="button" data-seg="${s.id}"><b>${k + 1}</b>${s.name} · ${s.min}분</button>`).join('');
+$$('#segList button').forEach(b => b.addEventListener('click', () => go(STEPS.findIndex(s => s.seg === b.dataset.seg))));
+
+// 음성
+let voiceOn = false, voice = null;
+const ttsOk = 'speechSynthesis' in window;
+function pickVoice() { const vs = speechSynthesis.getVoices(); return vs.find(v => /ko[-_]KR/i.test(v.lang) && /Google|Microsoft|Yuna|Heami|SunHi/i.test(v.name)) || vs.find(v => /ko/i.test(v.lang)) || null; }
+if (ttsOk) { voice = pickVoice(); speechSynthesis.addEventListener?.('voiceschanged', () => { voice = pickVoice(); }); }
+function speak(txt) { if (!ttsOk || !voiceOn) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(txt); u.lang = 'ko-KR'; u.rate = 1.05; if (voice) u.voice = voice; speechSynthesis.speak(u); }
+function toggleVoice() { if (!ttsOk) { toast('이 브라우저는 음성 합성을 지원하지 않아요.'); return; } voiceOn = !voiceOn; $('#bVoice').setAttribute('aria-pressed', String(voiceOn)); if (voiceOn) speak(cap.textContent); else speechSynthesis.cancel(); }
+$('#bVoice').addEventListener('click', toggleVoice);
+
+// 강사 대본
+const notes = $('#notes');
+function openNotes() { const seg = SEGS.find(x => x.id === STEPS[cur].seg); $('#nTitle').textContent = `${seg.name} · 강사 대본`; $('#nPlan').textContent = `계획 ${seg.min}분 · 장면 ${cur + 1}/${N}`; $('#nBody').textContent = seg.script; notes.hidden = false; }
+$('#bNotes').addEventListener('click', () => notes.hidden ? openNotes() : (notes.hidden = true));
+$('#nClose').addEventListener('click', () => { notes.hidden = true; });
+notes.addEventListener('click', e => { if (e.target === notes) notes.hidden = true; });
+
+// 토스트
+let toastT = null;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { el.hidden = true; }, 2800); }
+
+// 키보드
+document.addEventListener('keydown', e => {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (['input', 'textarea', 'select'].includes(tag)) return;
+  const k = e.key;
+  if (k === 'Escape') { notes.hidden = true; return; }
+  if (k === ' ' && tag !== 'button') { e.preventDefault(); playing ? stop() : play(); return; }
+  if (k === 'ArrowRight') { e.preventDefault(); go(cur + 1); return; }
+  if (k === 'ArrowLeft') { e.preventDefault(); go(cur - 1); return; }
+  if (k === 'Home') { go(0); return; }
+  if (/^[1-5]$/.test(k)) { go(STEPS.findIndex(s => s.seg === SEGS[+k - 1].id)); return; }
+  const l = k.toLowerCase();
+  if (l === 'v' || l === 'ㅍ') toggleVoice();
+  else if (l === 'n' || l === 'ㅜ') notes.hidden ? openNotes() : (notes.hidden = true);
+});
+
+// 퀴즈
+(function () {
+  let i = 0, score = 0, done = [];
+  const q = $('#simQ'), a = $('#simA'), o = $('#simO'), x = $('#simX'), dots = $('#simDots'), sc = $('#simScore');
+  function draw() {
+    dots.innerHTML = QUIZ.map((_, k) => `<i class="${done[k] === true ? 'r' : done[k] === false ? 'w' : k === i ? 'c' : ''}"></i>`).join('');
+    sc.textContent = `${score} / ${QUIZ.length}`;
+    if (i >= QUIZ.length) { q.innerHTML = `<small>끝</small>${score}개 맞혔어요. ${score >= 6 ? '교육용 라이선스, 통과예요.' : '한 장 정리를 다시 보고 처음부터 해 보세요.'}`; o.disabled = x.disabled = true; return; }
+    q.innerHTML = `<small>문항 ${i + 1} / ${QUIZ.length}</small>${esc(QUIZ[i][0])}`;
+    o.disabled = x.disabled = false; o.className = 'btn-o'; x.className = 'btn-x';
+  }
+  function answer(v) {
+    if (i >= QUIZ.length) return;
+    const [, ans, why] = QUIZ[i]; const right = v === ans;
+    done[i] = right; if (right) score++;
+    (v ? o : x).classList.add(right ? 'ok' : 'no'); o.disabled = x.disabled = true;
+    a.className = 'sim-ans ' + (right ? 'right' : 'wrong'); a.innerHTML = `<b>${right ? '맞아요' : '아쉬워요'} · 정답은 ${ans ? 'O' : 'X'}</b><br>${esc(why)}`;
+    setTimeout(() => { i++; draw(); }, 1700);
+  }
+  o.addEventListener('click', () => answer(true)); x.addEventListener('click', () => answer(false));
+  $('#simReset').addEventListener('click', () => { i = 0; score = 0; done = []; a.className = 'sim-ans'; a.textContent = '교육용 라이선스가 적용되는 Edu+ 또는 교육청 사업 Pro 계정 기준이에요. 직감으로 눌러 보세요.'; draw(); });
+  draw();
+})();
+
+// 체크리스트
+(function () {
+  const boxes = $$('#ck input'); const out = $('#ckDone');
+  const KEY = 'mc01-check';
+  try { const s = JSON.parse(localStorage.getItem(KEY) || '[]'); boxes.forEach((b, k) => { b.checked = !!s[k]; }); } catch (e) {}
+  function upd() { const n = boxes.filter(b => b.checked).length; out.textContent = n === boxes.length ? '6개 모두 완료. 1차시 이수예요.' : n ? `${n} / ${boxes.length} 완료` : ''; try { localStorage.setItem(KEY, JSON.stringify(boxes.map(b => b.checked))); } catch (e) {} }
+  boxes.forEach(b => b.addEventListener('change', upd)); upd();
+})();
+
+// 시작
+const m = /^#s(\d+)$/.exec(location.hash || '');
+go(m ? +m[1] - 1 : 0);
+</script>
+</body>
+</html>
