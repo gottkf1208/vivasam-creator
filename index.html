@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>쌤크리에이터 스튜디오</title>
+<meta name="description" content="비바샘 샘크리에이티브 연수 기획안 3편 · ON AIR 슬라이드">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--soft:#F9FAFB;--fill:#F2F4F6;--line:#E5E8EB;--t1:#191F28;--t2:#4E5968;--t3:#8B95A1;--blue:#3182F6;--blue-s:#E8F3FF;--red:#F04452;--ink:#191F28;
+--font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic","Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#0E1014;color:var(--t2);font-family:var(--font);-webkit-font-smoothing:antialiased;word-break:keep-all;letter-spacing:-0.01em;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 20px 80px}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.onair{display:inline-flex;align-items:center;gap:9px;background:var(--red);color:#fff;font-weight:900;font-size:14px;letter-spacing:.08em;padding:7px 13px 7px 11px;border-radius:9px}
+.onair i{width:9px;height:9px;border-radius:50%;background:#fff;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.prog{font-weight:800;font-size:16px;color:#fff}
+.tag{font-size:14px;font-weight:700;color:#8FBBFA;background:rgba(76,148,248,.18);padding:6px 12px;border-radius:999px}
+h1{font-size:clamp(34px,5vw,58px);line-height:1.2;font-weight:900;letter-spacing:-0.045em;color:#fff;margin:40px 0 0;text-wrap:balance}
+.lead{font-size:clamp(16px,1.6vw,20px);line-height:1.65;color:#AEB7C3;max-width:720px;margin:16px 0 0}
+.facts{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0 44px}
+.facts span{font-size:15px;font-weight:700;color:#C9D1DC;background:rgba(255,255,255,.07);padding:9px 15px;border-radius:12px}
+.grid{display:grid;gap:18px}
+@media(min-width:880px){.grid{grid-template-columns:repeat(3,1fr)}}
+.deck{display:flex;flex-direction:column;background:#fff;border-radius:28px;padding:28px 28px 24px;text-decoration:none;color:var(--t2);min-height:420px;transition:transform .18s,box-shadow .18s}
+.deck:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.deck:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.deck .st{font-size:14px;font-weight:900;color:var(--blue);letter-spacing:.02em}
+.deck h2{margin:12px 0 10px;font-size:27px;line-height:1.3;font-weight:900;letter-spacing:-0.04em;color:var(--t1)}
+.deck p{margin:0;font-size:15.5px;line-height:1.6}
+.deck ol{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:14.5px;color:var(--t1);font-weight:600}
+.deck ol li{display:grid;grid-template-columns:26px 1fr;gap:8px}
+.deck ol li b{color:var(--blue);font-weight:900;font-variant-numeric:tabular-nums}
+.deck .go{margin-top:auto;padding-top:20px;font-size:15px;font-weight:800;color:var(--blue)}
+.how{margin-top:40px;display:grid;gap:16px}
+@media(min-width:880px){.how{grid-template-columns:1.2fr 1fr}}
+.card{background:rgba(255,255,255,.06);border-radius:22px;padding:22px 24px;color:#C9D1DC}
+.card h3{margin:0 0 10px;font-size:16px;color:#fff}
+.card p,.card li{font-size:14.5px;line-height:1.65;margin:0}
+.card ul{margin:0;padding-left:18px;display:grid;gap:5px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;background:rgba(255,255,255,.1);padding:2px 7px;border-radius:6px;color:#fff}
+footer{margin-top:36px;font-size:13px;color:#8FA0B5;line-height:1.7}
+footer a{color:#AEB7C3}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span class="onair"><i></i>ON AIR</span><span class="prog">쌤크리에이터 스튜디오</span><span class="tag">비바샘 샘크리에이티브 연수 기획안 · 3편</span></div>
+  <h1>선생님이 직접 만드는 연수,<br>세 편의 기획안을 방송처럼</h1>
+  <p class="lead">비바샘 '샘크리에이티브 연수'(교사 참여형 6차시 실습 과정) 형식에 맞춘 기획안 세 편이에요. 각 편은 16장 슬라이드로, 편성표·기획 의도·과정 소개·차시별 큐시트·교실 장면·이수 기준·차별점·강사까지 담았어요. N키로 차시별 오프닝 멘트를, E키로 편집 모드를 열 수 있어요.</p>
+  <div class="facts"><span>직무 / 6차시(15차시 미만)</span><span>150분 · 차시당 25분</span><span>진도율 90% · 의견등록 100%</span><span>연수비(참고) 30,000원</span><span>강사 두목쿼카 + 쿼카연구회</span></div>
+
+  <div class="grid">
+    <a class="deck" href="miricanvas.html">
+      <span class="st">STUDIO A · 미리캔버스</span>
+      <h2>6차시 완성! 미리캔버스로 수업자료·학급살림 한 번에</h2>
+      <p>한글 폰트·학교 서식이 기본인 국산 도구로, 한국 교실 문서를 25분에 하나씩.</p>
+      <ol><li><b>01</b>미리캔버스 시작하기</li><li><b>02</b>수업 PPT 25분 완성</li><li><b>03</b>교실을 채우는 디자인</li><li><b>04</b>카드뉴스로 알리기</li><li><b>05</b>학생과 함께하는 미리캔버스</li><li><b>06</b>AI로 미리캔버스 끝내기</li></ol>
+      <span class="go">슬라이드 열기 →</span>
+    </a>
+    <a class="deck" href="vrew.html">
+      <span class="st">STUDIO B · 브루(Vrew)</span>
+      <h2>말하면 편집 끝! 브루로 만드는 수업 영상 6차시</h2>
+      <p>자막은 자동, 컷은 글자 지우듯. 영상 종류별로 매 차시 한 편을 완성하고 쇼츠까지.</p>
+      <ol><li><b>01</b>브루 시작하기</li><li><b>02</b>수업 설명 영상 만들기</li><li><b>03</b>AI 목소리로 영상 만들기</li><li><b>04</b>학급 행사 영상</li><li><b>05</b>학생과 함께 브루</li><li><b>06</b>AI로 브루 끝내기 · 쌤크리에이터 첫걸음</li></ol>
+      <span class="go">슬라이드 열기 →</span>
+    </a>
+    <a class="deck" href="physical-ai.html">
+      <span class="st">STUDIO C · 피지컬 AI</span>
+      <h2>화면 밖으로 나온 AI, 초등 교실 피지컬 AI 수업 6차시</h2>
+      <p>센서→판단→작동. 파퍼트의 구성주의와 연구회 에듀톤·라이프봇 사례로 짠 초등형 4질문 수업.</p>
+      <ol><li><b>01</b>피지컬 AI, 초등에서도 가능할까</li><li><b>02</b>센서로 세상 읽기</li><li><b>03</b>AI가 보고 듣는다</li><li><b>04</b>움직이는 로봇에 판단 달기</li><li><b>05</b>우리 반 피지컬 AI 프로젝트 설계</li><li><b>06</b>수업으로 완성하기</li></ol>
+      <span class="go">슬라이드 열기 →</span>
+    </a>
+  </div>
+
+  <div class="how">
+    <div class="card"><h3>이 기획안이 따른 비바샘 형식</h3><ul>
+      <li>샘크리에이티브 연수 = 선생님이 직접 만들어가는 직무연수, 6차시(15차시 미만) 실습형이 기본 단위</li>
+      <li>과정소개는 학습목표 4개 + 과정 특징 4개, 강의목차는 6차시 제목, 강사 2~3인</li>
+      <li>평가: 진도율 90% / 시험 0% / 의견등록 100% · 이수 기준 진도율 90%, 60점 이상</li>
+      <li>기준 과정: '6차시 완성! 캔바로 수업·디자인 한 번에' (30,000원, 연중)</li></ul></div>
+    <div class="card"><h3>코드에서 고치는 법</h3><p>내용은 <code>data/*.json</code>, 슬라이드 구성은 <code>build.py</code>, 디자인은 <code>engine.css</code>, 조작(대본·목차·편집·BGM)은 <code>engine.js</code>예요. 고친 뒤 <code>python build.py</code>를 실행하면 <code>dist/</code>에 단일 HTML 세 편이 다시 만들어져요. 브라우저 편집 모드(E)로 글자를 고치면 깃허브 페이지에서는 <code>*.edits.json</code>으로 저장돼요.</p></div>
+  </div>
+  <footer>형식 근거: <a href="https://t.vivasam.com/" target="_blank" rel="noopener">비바샘 원격교육연수원</a> 샘크리에이티브 연수 코너 · 디자인 원형: <a href="https://gottkf1208.github.io/vrew-talk/" target="_blank" rel="noopener">브루 연수 전 특강(ON AIR 덱)</a> · 2026. 9. 25 초안 v0.2</footer>
+</div>
+</body>
+</html>
