@@ -27,10 +27,14 @@
       <div class="pmeter">
         <div class="row"><span>이수한 차시</span><b id="doneN">0 / 6</b></div><div class="bar"><i id="doneBar"></i></div>
         <div class="row"><span>전체 장면 시청</span><b id="seenPct">0%</b></div><div class="bar"><i id="seenBar"></i></div>
-        <div class="note">각 차시는 장면 90% 이상 시청 + 만져 보기 통과로 이수돼요(비바샘 기준: 진도율 90%·의견등록). 이 브라우저에만 저장돼요.</div>
+        <div class="note">각 차시는 장면 90% 이상 시청 + 실습 완료 기준 체크 + 만져 보기 통과로 이수돼요(비바샘 기준: 진도율 90%·의견등록). 이 브라우저에만 저장돼요.</div>
       </div>
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn primary" id="continueBtn" href="#">이어서 보기</a><button class="btn small" id="resetBtn" type="button">진도 초기화</button></div>
     </div>
+  </div>
+  <div class="course-extra">
+    <div class="card"><h3>사전 준비 체크리스트 · 1차시 전에</h3><div class="ck" id="prep"></div><div class="ck-done" id="prepDone"></div></div>
+    <div><div class="card" style="padding-bottom:12px"><h3>산출물 누적 지도 · 앞 차시 산출물이 다음 차시 재료</h3></div><div class="chain" id="chain"></div></div>
   </div>
   <div class="sessions" id="sessions"></div>
   <div class="cert" id="cert" hidden>
@@ -51,7 +55,11 @@
 <script src="courses/index.js"></script>
 <script>
 (function () {
+  const cid0 = new URLSearchParams(location.search).get('c') || 'miricanvas';
+  const s = document.createElement('script'); s.src = `courses/${cid0}/labs.js?v=${Date.now() % 1e6}`; s.onload = main; s.onerror = main; document.head.appendChild(s);
+  function main() {
   const $ = s => document.querySelector(s);
+  const LABS = window.LABS || {};
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const cid = new URLSearchParams(location.search).get('c') || 'miricanvas';
   const C = window.COURSES[cid]; if (!C) { document.body.innerHTML = '<p style="padding:40px">과정을 찾을 수 없어요.</p>'; return; }
@@ -67,8 +75,18 @@
     const k = i + 1, p = cp[k]; const seen = p ? p.seen.filter(Boolean).length : 0; const total = p && p.total ? p.total : (p ? Math.max(seen, 1) : 0);
     const pct = p ? Math.min(100, Math.round(seen / (p.N || Math.max(total, 18)) * 100)) : 0;
     if (p && p.done) doneN++; seenSum += pct; if (!(p && p.done) && first === 1 && k > 1 && cp[k - 1] && cp[k - 1].done) first = k;
-    return `<a class="sess" href="play.html?c=${cid}&s=${k}"><span class="n">${String(k).padStart(2, '0')} · 25분</span><h3>${esc(t)}</h3><p>산출물 · ${esc(C.outputs[i])}</p><div class="meta"><span>세그먼트 5</span><span>만져 보기 8문항</span></div><div class="bar"><i class="${p && p.done ? 'ok' : ''}" style="width:${pct}%"></i></div>${p && p.done ? '<span class="badge">이수</span>' : ''}</a>`;
+    const lab = LABS[k];
+    return `<a class="sess" href="play.html?c=${cid}&s=${k}"><span class="n">${String(k).padStart(2, '0')} · 25분</span><h3>${esc(t)}</h3><p>산출물 · ${esc(C.outputs[i])}</p>${lab ? `<div class="lab-line"><i>실습 ${lab.time}분</i>${esc(lab.title)}</div>` : ''}<div class="meta"><span>세그먼트 5</span><span>실습 ${lab ? lab.pass.length : 0}기준</span><span>만져 보기 8문항</span></div><div class="bar"><i class="${p && p.done ? 'ok' : ''}" style="width:${pct}%"></i></div>${p && p.done ? '<span class="badge">이수</span>' : ''}</a>`;
   }).join('');
+  /* 사전 준비 · 산출물 지도 */
+  const PREPK = 'vc-prep-v1';
+  const loadPrep = () => { try { return JSON.parse(localStorage.getItem(PREPK) || '{}'); } catch (e) { return {}; } };
+  const prepAll = loadPrep(); const prepDone = prepAll[cid] || [];
+  $('#prep').innerHTML = (LABS.prep || []).map((p, k) => `<label><input type="checkbox" data-k="${k}" ${prepDone[k] ? 'checked' : ''}><span>${esc(p)}</span></label>`).join('') || '<p style="color:var(--faint);font-size:14px">준비 목록이 아직 없어요.</p>';
+  const pb = Array.from(document.querySelectorAll('#prep input'));
+  const updPrep = () => { const n = pb.filter(b => b.checked).length; $('#prepDone').textContent = n === pb.length && n ? '준비 끝. 1차시를 시작하세요.' : n ? `${n} / ${pb.length}` : ''; prepAll[cid] = pb.map(b => b.checked); try { localStorage.setItem(PREPK, JSON.stringify(prepAll)); } catch (e) {} };
+  pb.forEach(b => b.addEventListener('change', updPrep)); updPrep();
+  $('#chain').innerHTML = (LABS.chain || []).map(r => `<div class="row"><span class="n">${r[0]}차시</span><div><b>${esc(r[1])}</b><span>${esc(r[2])}</span></div></div>`).join('');
   $('#doneN').textContent = `${doneN} / 6`; $('#doneBar').style.width = doneN / 6 * 100 + '%'; $('#doneBar').className = doneN === 6 ? 'ok' : '';
   $('#seenPct').textContent = Math.round(seenSum / 6) + '%'; $('#seenBar').style.width = Math.round(seenSum / 6) + '%';
   let next = 1; for (let k = 1; k <= 6; k++) { if (!(cp[k] && cp[k].done)) { next = k; break; } if (k === 6) next = 6; }
@@ -80,6 +98,7 @@
     const nm = $('#certName'); try { nm.value = localStorage.getItem('vc-name') || ''; } catch (e) {}
     const upd = () => { $('#certNm').textContent = nm.value.trim() || '________'; try { localStorage.setItem('vc-name', nm.value.trim()); } catch (e) {} };
     nm.addEventListener('input', upd); upd();
+  }
   }
 })();
 </script>

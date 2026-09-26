@@ -14,15 +14,22 @@
   const load = () => { try { return JSON.parse(localStorage.getItem(PKEY) || '{}'); } catch (e) { return {}; } };
   const save = p => { try { localStorage.setItem(PKEY, JSON.stringify(p)); } catch (e) {} };
   const prog = load(); prog[cid] = prog[cid] || {}; prog[cid][sn] = prog[cid][sn] || { seen: [], quiz: 0, quizN: 0, check: [], done: false };
-  const P = prog[cid][sn];
+  const P = prog[cid][sn]; P.labPass = P.labPass || []; P.labSteps = P.labSteps || [];
   window.VC = { prog, save, cid, sn };
 
-  /* ---------- 데이터 파일 로드 ---------- */
+  /* ---------- 데이터 파일 로드 (차시 + 실습 플랜) ---------- */
+  let pending = 2;
+  const ready = () => { if (--pending === 0) init(); };
+  const v = Date.now() % 1e6;
   const sc = document.createElement('script');
-  sc.src = `courses/${cid}/s${sn}.js?v=${Date.now() % 1e6}`;
-  sc.onload = init;
+  sc.src = `courses/${cid}/s${sn}.js?v=${v}`;
+  sc.onload = ready;
   sc.onerror = () => { $('#stage').innerHTML = '<div class="talk"><div class="bubble" style="left:200px;top:300px;width:1000px">이 차시는 아직 준비 중이에요.</div></div>'; $('#cap').innerHTML = '<span>준비 중</span>'; };
   document.head.appendChild(sc);
+  const sl = document.createElement('script');
+  sl.src = `courses/${cid}/labs.js?v=${v}`;
+  sl.onload = ready; sl.onerror = ready;
+  document.head.appendChild(sl);
 
   function init() {
     const L = window.LESSON;
@@ -105,7 +112,7 @@
         $$('.fb', t).forEach((c, k) => later(() => c.classList.add('on'), 300 + k * 800));
       } else if (s.type === 'mission') {
         const t = document.createElement('div'); t.className = 'mission';
-        t.innerHTML = `<div class="in"><div class="k">${esc(s.k || '실습 미션')}</div><h2>${esc(s.title)}</h2><ol>${s.items.map((it, k) => `<li><b>${k + 1}</b><span>${it}</span></li>`).join('')}</ol></div><div class="q"><img src="char/${s.pose || 'point'}.webp" alt=""></div>${s.stamp ? `<div class="stamp">${esc(s.stamp)}</div>` : ''}`;
+        t.innerHTML = `<div class="in"><div class="k">${esc(s.k || '실습 미션')}</div><h2>${esc(s.title)}</h2><ol>${s.items.map((it, k) => `<li><b>${k + 1}</b><span>${it}</span></li>`).join('')}</ol><p class="hint">↓ 아래 <b>실습</b> 칸에 분 단위 액션 플랜 · 타이머 · 완료 기준이 있어요. 영상을 멈추고 거기서 하세요.</p></div><div class="q"><img src="char/${s.pose || 'point'}.webp" alt=""></div>${s.stamp ? `<div class="stamp">${esc(s.stamp)}</div>` : ''}`;
         stage.append(t, no);
         $$('li', t).forEach((c, k) => later(() => c.classList.add('on'), 400 + k * 600));
         if (s.stamp) later(() => $('.stamp', t).classList.add('on'), 400 + s.items.length * 600 + 300);
@@ -169,6 +176,45 @@
       else if (l === 'n' || l === 'ㅜ') notes.hidden ? openNotes() : (notes.hidden = true);
     });
 
+    /* 실습 · 액션 플랜 */
+    const LAB = (window.LABS || {})[sn];
+    let labBoxes = [];
+    if (!LAB) { $('#lab').hidden = true; }
+    else {
+      $('#labH2').textContent = LAB.title;
+      $('#labSub').textContent = `${LAB.time}분 · 산출물 1개 · 완료 기준 ${LAB.pass.length}개를 모두 체크해야 이수예요`;
+      $('#labIn').innerHTML = LAB.input.map(i => `<li><b>${esc(i[0])}</b><span>${esc(i[1])}</span>${i[2] ? `<small>없으면 · ${esc(i[2])}</small>` : ''}</li>`).join('');
+      $('#labOutName').textContent = LAB.output.name;
+      $('#labOutSpec').innerHTML = LAB.output.spec.map(s => `<li>${esc(s)}</li>`).join('');
+      $('#labSteps').innerHTML = LAB.steps.map((s, k) => `<li data-min="${s[0]}"><label><input type="checkbox" data-k="${k}"><span class="min">${String(s[0]).padStart(2, '0')}:00</span><span class="act"><b>${esc(s[1])}</b>${s[2] ? `<small>${esc(s[2])}</small>` : ''}</span></label></li>`).join('');
+      $$('#labSteps input').forEach((b, k) => { b.checked = !!P.labSteps[k]; b.closest('li').classList.toggle('done', b.checked); b.addEventListener('change', () => { P.labSteps[k] = b.checked; b.closest('li').classList.toggle('done', b.checked); saveProgress(); }); });
+      $('#labPass').innerHTML = LAB.pass.map((p, k) => `<label><input type="checkbox" data-k="${k}"><span>${esc(p)}</span></label>`).join('');
+      labBoxes = $$('#labPass input');
+      labBoxes.forEach((b, k) => { b.checked = !!P.labPass[k]; b.addEventListener('change', () => { P.labPass[k] = b.checked; saveProgress(); if (labBoxes.every(x => x.checked)) toast('실습 완료 기준 통과. 만져 보기로 내려가요.'); }); });
+      $('#labFix').innerHTML = LAB.fix.map(f => `<dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd>`).join('');
+      $('#labBranch').innerHTML = LAB.branch.map(f => `<dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd>`).join('');
+      $('#labSubmit').innerHTML = `<b>비바샘 의견 등록</b> · ${esc(LAB.submit.note)}`;
+      $('#labNext').innerHTML = `<b>이 산출물이 가는 곳</b> · ${esc(LAB.submit.next)}`;
+      /* 타이머 */
+      let tmRun = false, tmStart = 0, tmBase = 0, tmRaf = null;
+      const tmEl = $('#labTm'), total = LAB.time * 60;
+      const fmt = s => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+      function tmDraw() {
+        const el = tmRun ? tmBase + (performance.now() - tmStart) / 1000 : tmBase;
+        const left = Math.max(0, total - el);
+        tmEl.textContent = fmt(left); tmEl.classList.toggle('over', left === 0);
+        const m = el / 60;
+        $$('#labSteps li').forEach(li => li.classList.toggle('now', m >= +li.dataset.min && (!li.nextElementSibling || m < +li.nextElementSibling.dataset.min) && el > 0 && left > 0));
+        if (tmRun) { if (left === 0) { tmRun = false; $('#labStart').textContent = '다시'; toast('실습 시간이 끝났어요. 완료 기준을 체크해 보세요.'); } else tmRaf = requestAnimationFrame(tmDraw); }
+      }
+      tmEl.textContent = fmt(total);
+      $('#labStart').addEventListener('click', () => {
+        if (tmRun) { tmRun = false; tmBase += (performance.now() - tmStart) / 1000; $('#labStart').textContent = '계속'; cancelAnimationFrame(tmRaf); }
+        else { if (tmBase >= total) tmBase = 0; tmRun = true; tmStart = performance.now(); $('#labStart').textContent = '멈춤'; stop(); tmDraw(); }
+      });
+      $('#labReset').addEventListener('click', () => { tmRun = false; tmBase = 0; cancelAnimationFrame(tmRaf); $('#labStart').textContent = '시작'; tmDraw(); });
+    }
+
     /* 만져 보기 (퀴즈) */
     const Q = L.quiz;
     $('#quizH2').textContent = Q.title; $('#quizSub').textContent = Q.sub || '';
@@ -218,8 +264,12 @@
     function ratio() { return Math.round(P.seen.filter(Boolean).length / N * 100); }
     function saveProgress() {
       const r = ratio(); const qOk = P.quizN ? P.quiz >= Math.ceil(P.quizN * 0.75) : false;
-      P.done = r >= 90 && qOk;
+      const labN = LAB ? LAB.pass.length : 0, labK = LAB ? LAB.pass.filter((_, k) => P.labPass[k]).length : 0, labOk = !LAB || labK === labN;
+      P.labN = labN; P.labK = labK;
+      P.done = r >= 90 && qOk && labOk;
       save(prog);
+      $('#pmLab').textContent = LAB ? `${labK} / ${labN}` : '없음'; $('#pmLabBar').style.width = (labN ? labK / labN * 100 : 100) + '%'; $('#pmLabBar').className = labOk ? 'ok' : '';
+      if (LAB) $('#labPassDone').textContent = labOk ? `${labN}개 모두 통과 · 이수 조건 충족` : labK ? `${labK} / ${labN} 통과` : '';
       $('#pmSeen').textContent = r + '%'; $('#pmSeenBar').style.width = r + '%'; $('#pmSeenBar').className = r >= 90 ? 'ok' : '';
       $('#pmQuiz').textContent = P.quizN ? `${P.quiz} / ${P.quizN}` : '아직'; $('#pmQuizBar').style.width = (P.quizN ? P.quiz / P.quizN * 100 : 0) + '%'; $('#pmQuizBar').className = qOk ? 'ok' : '';
       const pill = $('#progPill'); pill.classList.toggle('done', P.done); $('#pillTxt').textContent = P.done ? '이수 완료' : `진도 ${r}%`; $('#pillBar').style.width = r + '%';
