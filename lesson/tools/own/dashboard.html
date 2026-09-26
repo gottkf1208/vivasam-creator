@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><title>급식실 소음 대시보드</title>
+<style>
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:#0F1116;color:#EEF0F4}
+.top{display:flex;align-items:center;justify-content:space-between;padding:22px 40px;border-bottom:1px solid #2A2E39}
+.top h1{margin:0;font-size:26px}.top span{color:#8A8F9C;font-size:15px}
+.live{display:inline-flex;align-items:center;gap:8px;background:#FF3B30;color:#fff;font-weight:900;padding:6px 12px;border-radius:8px;font-size:14px}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;padding:28px 40px}
+.card{background:#181B22;border:1px solid #2A2E39;border-radius:18px;padding:22px}
+.card h2{margin:0 0 6px;font-size:17px;color:#B8BCC8}
+.big{font-size:72px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.big small{font-size:22px;color:#8A8F9C;margin-left:8px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.kpi{background:#12141A;border-radius:14px;padding:16px}
+.kpi b{display:block;font-size:30px}.kpi span{color:#8A8F9C;font-size:13px}
+.stat{padding:10px 0;border-top:1px solid #2A2E39;display:flex;justify-content:space-between;font-size:15px}
+.stat b{color:#F2A516}
+.alarm{background:#3A1F1A;border:1px solid #FF3B30;border-radius:14px;padding:14px 16px;margin-top:16px;font-size:15px;color:#FFC79A}
+</style></head><body>
+<div class="top"><div><h1>6학년 2반 급식실 소음 대시보드</h1><span>마이크로비트 소리 센서 · 5초마다 측정 · 2026. 10. 14 12:20~12:45</span></div><span class="live">● LIVE</span></div>
+<div class="grid">
+  <div class="card"><h2>지금 소음 (0~255)</h2><div class="big">178<small>기준 150 초과</small></div>
+    <svg viewBox="0 0 640 220" width="100%" style="margin-top:18px">
+      <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#F2A516" stop-opacity=".6"/><stop offset="1" stop-color="#F2A516" stop-opacity="0"/></linearGradient></defs>
+      <line x1="0" y1="80" x2="640" y2="80" stroke="#FF3B30" stroke-dasharray="6 6"/><text x="6" y="72" fill="#FF3B30" font-size="12">기준 150</text>
+      <polyline fill="url(#g)" stroke="none" points="0,200 40,170 80,160 120,175 160,150 200,120 240,100 280,110 320,95 360,70 400,60 440,75 480,55 520,85 560,120 600,140 640,150 640,220 0,220"/>
+      <polyline fill="none" stroke="#F2A516" stroke-width="3" points="0,200 40,170 80,160 120,175 160,150 200,120 240,100 280,110 320,95 360,70 400,60 440,75 480,55 520,85 560,120 600,140 640,150"/>
+      <text x="0" y="216" fill="#8A8F9C" font-size="12">12:20</text><text x="300" y="216" fill="#8A8F9C" font-size="12">12:32</text><text x="600" y="216" fill="#8A8F9C" font-size="12">12:45</text>
+    </svg>
+    <div class="kpis"><div class="kpi"><b>212</b><span>최고 (12:36)</span></div><div class="kpi"><b>96</b><span>최저 (12:21)</span></div><div class="kpi"><b>7회</b><span>기준 초과</span></div></div>
+  </div>
+  <div class="card"><h2>모둠별 측정 기록</h2>
+    <div class="stat"><span>1모둠 · 배식대 앞</span><b>평균 171</b></div>
+    <div class="stat"><span>2모둠 · 창가</span><b>평균 132</b></div>
+    <div class="stat"><span>3모둠 · 입구</span><b>평균 158</b></div>
+    <div class="stat"><span>4모둠 · 퇴식구</span><b>평균 189</b></div>
+    <div class="alarm">⚠ 12:36 퇴식구 212 → 알리미 로봇이 표지판을 들었어요 (초과 3회째)</div>
+    <h2 style="margin-top:22px">우리가 고친 것</h2>
+    <div class="stat"><span>기준값</span><b>120 → 150</b></div>
+    <div class="stat"><span>측정 간격</span><b>1초 → 5초</b></div>
+    <div class="stat"><span>센서 위치</span><b>바닥 → 벽 1.2m</b></div>
+  </div>
+</div>
+</body></html>

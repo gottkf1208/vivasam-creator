@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>과정 홈</title>
+<meta name="description" content="비바샘 샘크리에이티브 연수 시제품 · 과정 홈(6차시 진도·이수증)">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="engine/player.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" href="index.html"><i>Q</i>쌤크리에이터 스튜디오 <small>· 연수 시제품</small></a>
+    <nav><a href="../index.html">기획안 덱</a><a href="index.html">과정 목록</a></nav>
+  </div>
+  <div class="course-hero">
+    <div>
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="h1"></h1>
+      <p class="sub" id="sub"></p>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="course-meter">
+      <h3 style="font-size:14px;font-weight:800;color:var(--faint);letter-spacing:.04em;margin-bottom:10px">과정 진도</h3>
+      <div class="pmeter">
+        <div class="row"><span>이수한 차시</span><b id="doneN">0 / 6</b></div><div class="bar"><i id="doneBar"></i></div>
+        <div class="row"><span>전체 장면 시청</span><b id="seenPct">0%</b></div><div class="bar"><i id="seenBar"></i></div>
+        <div class="note">각 차시는 장면 90% 이상 시청 + 만져 보기 통과로 이수돼요(비바샘 기준: 진도율 90%·의견등록). 이 브라우저에만 저장돼요.</div>
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn primary" id="continueBtn" href="#">이어서 보기</a><button class="btn small" id="resetBtn" type="button">진도 초기화</button></div>
+    </div>
+  </div>
+  <div class="sessions" id="sessions"></div>
+  <div class="cert" id="cert" hidden>
+    <h3>이수증 만들기</h3>
+    <p style="color:var(--muted);font-size:14.5px">6차시를 모두 이수했어요. 이름을 적으면 아래 이수증이 채워져요. 인쇄(Ctrl+P)로 저장할 수 있어요.</p>
+    <input type="text" id="certName" placeholder="이름" maxlength="20">
+    <div class="cert-paper" id="certPaper">
+      <div class="t">CERTIFICATE · 시제품</div>
+      <h4 id="certCourse"></h4>
+      <div class="nm" id="certNm">________</div>
+      <p>위 사람은 비바샘 샘크리에이티브 연수 시제품 <span id="certCourse2"></span>(6차시 · 150분)의 모든 차시를 시청하고 만져 보기를 통과했음을 확인합니다.</p>
+      <p id="certDate"></p>
+      <p style="margin-top:8px;font-weight:800;color:var(--ink)">경기 AI융합교육연구회 Q.U.O.K.A · 두목쿼카</p>
+    </div>
+  </div>
+  <footer>비바샘 샘크리에이티브 연수 기획 · 시제품 · 경기 AI융합교육연구회 Q.U.O.K.A · 두목쿼카. 이수 판정은 시제품용 로컬 저장이며 실제 이수증은 비바샘 원격교육연수원이 발급해요.</footer>
+</div>
+<script src="courses/index.js"></script>
+<script>
+(function () {
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const cid = new URLSearchParams(location.search).get('c') || 'miricanvas';
+  const C = window.COURSES[cid]; if (!C) { document.body.innerHTML = '<p style="padding:40px">과정을 찾을 수 없어요.</p>'; return; }
+  const PKEY = 'vc-progress-v1';
+  const load = () => { try { return JSON.parse(localStorage.getItem(PKEY) || '{}'); } catch (e) { return {}; } };
+  let prog = load(); const cp = prog[cid] || {};
+  document.title = `${C.name} · 과정 홈`;
+  $('#eyebrow').innerHTML = `<b>STUDIO ${C.studio}</b> 직무 / 6차시(15차시 미만) · 150분`;
+  $('#h1').textContent = C.tagline; $('#sub').textContent = C.desc;
+  $('#chips').innerHTML = [['도구', C.tool], ['차시', '6개 · 25분씩'], ['강사', '두목쿼카 + 쿼카연구회']].map(c => `<span class="chip">${esc(c[0])} <b>${esc(c[1])}</b></span>`).join('');
+  let doneN = 0, seenSum = 0, first = 1;
+  $('#sessions').innerHTML = C.sessions.map((t, i) => {
+    const k = i + 1, p = cp[k]; const seen = p ? p.seen.filter(Boolean).length : 0; const total = p && p.total ? p.total : (p ? Math.max(seen, 1) : 0);
+    const pct = p ? Math.min(100, Math.round(seen / (p.N || Math.max(total, 18)) * 100)) : 0;
+    if (p && p.done) doneN++; seenSum += pct; if (!(p && p.done) && first === 1 && k > 1 && cp[k - 1] && cp[k - 1].done) first = k;
+    return `<a class="sess" href="play.html?c=${cid}&s=${k}"><span class="n">${String(k).padStart(2, '0')} · 25분</span><h3>${esc(t)}</h3><p>산출물 · ${esc(C.outputs[i])}</p><div class="meta"><span>세그먼트 5</span><span>만져 보기 8문항</span></div><div class="bar"><i class="${p && p.done ? 'ok' : ''}" style="width:${pct}%"></i></div>${p && p.done ? '<span class="badge">이수</span>' : ''}</a>`;
+  }).join('');
+  $('#doneN').textContent = `${doneN} / 6`; $('#doneBar').style.width = doneN / 6 * 100 + '%'; $('#doneBar').className = doneN === 6 ? 'ok' : '';
+  $('#seenPct').textContent = Math.round(seenSum / 6) + '%'; $('#seenBar').style.width = Math.round(seenSum / 6) + '%';
+  let next = 1; for (let k = 1; k <= 6; k++) { if (!(cp[k] && cp[k].done)) { next = k; break; } if (k === 6) next = 6; }
+  $('#continueBtn').href = `play.html?c=${cid}&s=${next}`; $('#continueBtn').textContent = doneN === 6 ? '다시 보기' : (doneN ? `${next}차시 이어서 보기` : '1차시 시작');
+  $('#resetBtn').addEventListener('click', () => { if (!confirm('이 과정의 진도 기록을 지울까요?')) return; prog = load(); delete prog[cid]; localStorage.setItem(PKEY, JSON.stringify(prog)); location.reload(); });
+  if (doneN === 6) {
+    $('#cert').hidden = false; $('#certCourse').textContent = C.name; $('#certCourse2').textContent = C.name;
+    $('#certDate').textContent = new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+    const nm = $('#certName'); try { nm.value = localStorage.getItem('vc-name') || ''; } catch (e) {}
+    const upd = () => { $('#certNm').textContent = nm.value.trim() || '________'; try { localStorage.setItem('vc-name', nm.value.trim()); } catch (e) {} };
+    nm.addEventListener('input', upd); upd();
+  }
+})();
+</script>
+</body>
+</html>

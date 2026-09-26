@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8"><title>소음 측정 기록표</title>
+<style>
+body{margin:0;font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;background:#fff;color:#1B1F24;padding:34px 60px}
+h1{margin:0 0 4px;font-size:26px}.sub{color:#5F6B76;margin:0 0 18px;font-size:14px}
+.wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:26px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{border:1px solid #D6D9E0;padding:8px 10px;text-align:center}
+th{background:#E4F6F9;color:#127E90}
+td.odd{background:#FDECEC;color:#B42318;font-weight:800}
+.chart{border:1px solid #D6D9E0;border-radius:12px;padding:14px}
+.chart h3{margin:0 0 8px;font-size:15px;color:#5F6B76}
+.note{margin-top:12px;background:#FDEFE3;border-radius:10px;padding:10px 12px;font-size:14px;color:#B3520F}
+</style></head><body>
+<h1>교실 소음 측정 기록표 · 재료별</h1>
+<p class="sub">4학년 과학 '소리의 성질' · 마이크로비트 소리 센서(0~255) · 상자 안 부저 소리를 재료로 막고 측정</p>
+<div class="wrap">
+<table>
+<tr><th>재료</th><th>1회</th><th>2회</th><th>3회</th><th>평균</th><th>예상 순위</th><th>실제 순위</th></tr>
+<tr><td>없음(기준)</td><td>201</td><td>198</td><td>204</td><td>201</td><td>-</td><td>-</td></tr>
+<tr><td>종이 1장</td><td>176</td><td>181</td><td>172</td><td>176</td><td>4</td><td>4</td></tr>
+<tr><td>플라스틱 판</td><td>140</td><td>144</td><td>139</td><td>141</td><td>2</td><td>3</td></tr>
+<tr><td>솜</td><td>98</td><td class="odd">163</td><td>101</td><td>121</td><td>1</td><td>1</td></tr>
+<tr><td>수건</td><td>118</td><td>121</td><td>115</td><td>118</td><td>3</td><td>2</td></tr>
+</table>
+<div class="chart"><h3>평균 소음 (낮을수록 잘 막음)</h3>
+<svg viewBox="0 0 420 200" width="100%">
+<g font-size="12" fill="#5F6B76"><text x="4" y="30">없음</text><text x="4" y="64">종이</text><text x="4" y="98">플라스틱</text><text x="4" y="132">솜</text><text x="4" y="166">수건</text></g>
+<rect x="70" y="18" width="335" height="18" fill="#9AA5AF"/><text x="290" y="31" fill="#fff" font-size="12">201</text>
+<rect x="70" y="52" width="293" height="18" fill="#2BB3C9"/><text x="330" y="65" fill="#fff" font-size="12">176</text>
+<rect x="70" y="86" width="235" height="18" fill="#2BB3C9"/><text x="272" y="99" fill="#fff" font-size="12">141</text>
+<rect x="70" y="120" width="202" height="18" fill="#F2812D"/><text x="238" y="133" fill="#fff" font-size="12">121</text>
+<rect x="70" y="154" width="197" height="18" fill="#2BB3C9"/><text x="233" y="167" fill="#fff" font-size="12">118</text>
+</svg>
+<div class="note">솜 2회차 163은 왜 튀었을까? → 뚜껑이 덜 닫혔음. 재측정하니 99. "어긋난 값은 실패가 아니라 단서"</div>
+</div>
+</div>
+</body></html>

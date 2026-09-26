@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>연수 차시</title>
+<meta name="description" content="비바샘 샘크리에이티브 연수 시제품 · 차시 플레이어">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="engine/player.css">
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" id="brandLink" href="index.html"><i>Q</i><span id="brandCourse">연수</span> <small>· 쌤크리에이터 스튜디오</small></a>
+    <nav><span class="prog-pill" id="progPill"><span id="pillTxt">진도 0%</span><i><b id="pillBar"></b></i></span><a href="#watch">보기</a><a href="#touch">만져 보기</a><a href="#say">이렇게 말해요</a><a href="#check">체크·과제</a><a href="#srcSec">출처</a></nav>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="h1"></h1>
+    <p class="sub" id="sub"></p>
+    <div class="chips" id="chips"></div>
+    <div class="sess-nav" id="sessNav"></div>
+  </header>
+
+  <div class="theater-grid" id="watch">
+    <div class="theater">
+      <div class="stage-wrap" id="stageWrap"><div class="stage" id="stage"></div></div>
+      <div class="caption-bar" id="cap"></div>
+      <div class="progress"><i id="prog"></i></div>
+      <div class="controls">
+        <button class="btn primary" id="bPlay" type="button"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg><span>재생</span></button>
+        <button class="btn" id="bPrev" type="button" aria-label="이전 장면"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <span class="pg" id="pg">1 / 1</span>
+        <button class="btn" id="bNext" type="button" aria-label="다음 장면"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+        <span class="sp"></span>
+        <button class="btn" id="bVoice" type="button" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4zM15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg><span>음성</span></button>
+        <button class="btn" id="bNotes" type="button"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>강사 대본</span></button>
+      </div>
+      <div class="seg-list" id="segList"></div>
+    </div>
+    <aside class="side">
+      <div class="card"><h3>이 장면에서</h3><h4 id="sideTitle"></h4><ul id="sideDo"></ul></div>
+      <div class="card tip"><h3>왜 이렇게 해요</h3><p id="sideWhy"></p></div>
+      <div class="card"><h3>이 차시 진도</h3>
+        <div class="pmeter">
+          <div class="row"><span>장면 시청</span><b id="pmSeen">0%</b></div><div class="bar"><i id="pmSeenBar"></i></div>
+          <div class="row"><span>만져 보기</span><b id="pmQuiz">아직</b></div><div class="bar"><i id="pmQuizBar"></i></div>
+          <div class="note">장면 <span id="chipN">0</span>개 중 90% 이상 보고, 만져 보기 4분의 3 이상 맞히면 이수예요. 이 브라우저에만 저장돼요.</div>
+        </div></div>
+      <div class="card"><h3>단축키</h3><div class="keys"><span><kbd>Space</kbd> 재생·멈춤</span><span><kbd>←</kbd><kbd>→</kbd> 장면</span><span><kbd>V</kbd> 음성</span><span><kbd>N</kbd> 대본</span><span><kbd>1</kbd>~<kbd>5</kbd> 세그먼트</span></div></div>
+    </aside>
+  </div>
+
+  <section class="blk" id="touch">
+    <div class="sec-h"><span class="no">만져 보기</span><h2 id="quizH2"></h2><p id="quizSub"></p></div>
+    <div class="grid2">
+      <div class="sim" id="sim">
+        <div class="sim-q" id="simQ"></div>
+        <div class="sim-opts" id="simOpts"></div>
+        <div class="sim-ans" id="simA"></div>
+        <div class="sim-foot"><div class="sim-dots" id="simDots"></div><span class="sim-score" id="simScore">0 / 0</span><button type="button" class="btn small" id="simReset">처음부터</button></div>
+      </div>
+      <div class="card"><h3 id="refTitle">한 장으로 정리</h3><div class="ref" id="ref"></div></div>
+    </div>
+  </section>
+
+  <section class="blk" id="say">
+    <div class="sec-h"><span class="no">이렇게 말해요</span><h2>학생에게, 동료에게 그대로 할 말</h2></div>
+    <div class="say" id="say"></div>
+  </section>
+
+  <section class="blk" id="check">
+    <div class="sec-h"><span class="no">체크 · 과제</span><h2>이 차시를 마치면</h2></div>
+    <div class="grid2">
+      <div><div class="ck" id="ck"></div><div class="ck-done" id="ckDone"></div></div>
+      <div class="side"><div class="card" id="hw"></div><div class="card" id="next"></div></div>
+    </div>
+    <div class="finish" id="finish" hidden>
+      <div><h3>이 차시를 이수했어요</h3><p>장면 90% 이상 시청 · 만져 보기 통과. 과정 홈에서 6차시 모두 이수하면 이수증을 만들 수 있어요.</p></div>
+      <div class="acts"><a class="btn aqua" id="finishNext" href="#">다음 차시</a><a class="btn" id="finishHome" href="#">과정 홈</a></div>
+    </div>
+  </section>
+
+  <section class="blk src" id="srcSec">
+    <div class="sec-h"><span class="no">출처</span><h2>이 차시가 근거로 삼은 것</h2><p>2026. 9 확인</p></div>
+    <div class="card"><ul id="src"></ul></div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<div class="notes" id="notes" hidden>
+  <div class="notes-box" role="dialog" aria-label="강사 대본">
+    <h3 id="nTitle"></h3><div class="plan" id="nPlan"></div><p id="nBody"></p>
+    <div class="acts"><button type="button" class="btn" id="nClose">닫기 <kbd>Esc</kbd></button></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="courses/index.js"></script>
+<script src="engine/player.js"></script>
+</body>
+</html>
