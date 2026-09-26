@@ -109,8 +109,8 @@
         "학교 이메일",
         "크롬 브라우저"
       ],
-      "lesson": "lesson/miricanvas-01.html",
-      "lessonLabel": "1차시 연수 시제품 보기 (실제 화면 캡처 22장면)"
+      "lesson": "lesson/play.html?c=miricanvas&s=1",
+      "lessonLabel": "1차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 2,
@@ -155,7 +155,9 @@
       "prep": [
         "다음 주 수업 차시 1개 선정",
         "교과서 이미지 또는 학습 자료 2~3개"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=miricanvas&s=2",
+      "lessonLabel": "2차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 3,
@@ -201,7 +203,9 @@
       "prep": [
         "학급 규칙 문구",
         "컬러 프린터 접근"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=miricanvas&s=3",
+      "lessonLabel": "3차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 4,
@@ -246,7 +250,9 @@
       "prep": [
         "알릴 학급 행사 1건",
         "학교 로고(선택)"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=miricanvas&s=4",
+      "lessonLabel": "4차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 5,
@@ -293,7 +299,9 @@
       "prep": [
         "학생용 기기(태블릿 또는 PC)",
         "학생 계정 발급 동의"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=miricanvas&s=5",
+      "lessonLabel": "5차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 6,
@@ -340,7 +348,9 @@
       "prep": [
         "1~5차시 결과물",
         "아이 그림 또는 사진 3장"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=miricanvas&s=6",
+      "lessonLabel": "6차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     }
   ],
   "classroom": [

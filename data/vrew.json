@@ -109,8 +109,8 @@
         "스마트폰 촬영 영상 1분",
         "마이크(선택)"
       ],
-      "lesson": "lesson/vrew-01.html",
-      "lessonLabel": "1차시 연수 시제품 보기 (웹 브루 실제 화면 22장면)"
+      "lesson": "lesson/play.html?c=vrew&s=1",
+      "lessonLabel": "1차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 2,
@@ -156,7 +156,9 @@
         "설명할 개념 1개",
         "PPT 또는 판서 앱",
         "화면 녹화 도구(OBS 또는 브루 내장)"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=vrew&s=2",
+      "lessonLabel": "2차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 3,
@@ -202,7 +204,9 @@
       "prep": [
         "수업 도입 대본 200자",
         "(선택) 생성형 AI 계정"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=vrew&s=3",
+      "lessonLabel": "3차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 4,
@@ -248,7 +252,9 @@
       "prep": [
         "행사 사진 20~30장",
         "보호자 영상 동의 현황"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=vrew&s=4",
+      "lessonLabel": "4차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 5,
@@ -296,7 +302,9 @@
         "학생용 기기(태블릿·PC)",
         "촬영 동의",
         "모둠 역할표"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=vrew&s=5",
+      "lessonLabel": "5차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     },
     {
       "n": 6,
@@ -343,7 +351,9 @@
       "prep": [
         "2차시 설명 영상",
         "유튜브 계정(선택)"
-      ]
+      ],
+      "lesson": "lesson/play.html?c=vrew&s=6",
+      "lessonLabel": "6차시 연수 샘플 강의 보기 (실제 화면 캡처 · 진도 · 퀴즈)"
     }
   ],
   "classroom": [
